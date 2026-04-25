@@ -36,7 +36,7 @@ export default function Shop() {
       </section>
 
       {/* Filters */}
-      <section className="py-8 sticky top-[88px] z-30 bg-ivory/95 backdrop-blur-md border-b" style={{ borderColor: "hsl(var(--line))" }}>
+      <section className="py-8 border-b" style={{ borderColor: "hsl(var(--line))" }}>
         <div className="container-luxe flex flex-wrap items-center justify-between gap-6">
           <div className="flex flex-wrap items-center gap-2">
             <span className="overline mr-2">Category</span>

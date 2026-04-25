@@ -70,7 +70,7 @@ export default function NutButterBuilder() {
 
       <section className="py-12 grid md:grid-cols-12 container-luxe gap-10">
         {/* Steps sidebar */}
-        <aside className="md:col-span-3 md:sticky md:top-32 md:self-start">
+        <aside className="md:col-span-3">
           <ol className="space-y-4">
             {STEPS.map((s, i) => (
               <li key={s.key}>
@@ -178,7 +178,7 @@ export default function NutButterBuilder() {
         </div>
 
         {/* Live preview */}
-        <aside className="md:col-span-3 self-start md:sticky md:top-32">
+        <aside className="md:col-span-3 self-start">
           <div className="bg-sand p-6">
             <div className="aspect-square overflow-hidden bg-ivory mb-5">
               <img src="https://images.pexels.com/photos/33657317/pexels-photo-33657317.jpeg" alt="" className="w-full h-full object-cover" />

@@ -1,0 +1,48 @@
+{
+  "summary": "Iteration 3 polish-fix verification for Silkroute Naturals. Route-change rendering bug (IntersectionObserver regression) is FIXED — verified by navigating Home -> Shop -> Our Story -> Builder without page refresh; all .fade-up elements render at opacity=1 (Home: 14/14, Our Story: 5/5, Builder: 0/0 with content visible). Sticky behaviour REMOVED on Shop filter bar and on both NutButterBuilder steps & live-preview sidebars (sticky count inside <main> = 0; only Header retains sticky which is correct). Backend regression: 44/44 pytest pass (100%). Frontend regression: customer login OK, /api/auth/me returns 200, admin /admin loads dashboard with charts, search modal opens, wishlist page reachable, forgot-password page renders, SEO meta tags update per route. ONLY FAILURE: hero H1 left-edge does not align with brand-logo left-edge — measured diff = 18.8 px (expected < 5 px) on 1920 viewport. Root cause is a CSS layout issue in Home.jsx hero section (see RCA below).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/login", "issue": "(carryover from iter 1) No brute-force lockout / rate-limit; low priority."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Home.jsx hero <section>",
+        "issue": "Hero H1 left-edge is 18.8 px to the right of brand-logo left-edge (logo.left=320 in header container-luxe; hero h1.left=386.8 with hero container-luxe.left=338.8). The same .container-luxe class renders at TWO different left positions because the hero <section className='relative min-h-[92vh] flex items-end overflow-hidden grain'> turns container-luxe into a flex item. Without explicit 'w-full' on container-luxe (or without the section being 'flex'), mx-auto centering of the flex item shrinks horizontally — producing the 18.8 px right-shift. The col-span-7 + 48 px container padding nest correctly; the only mis-alignment is the container-luxe outer left itself.",
+        "selector": "[data-testid=hero-title] vs [data-testid=brand-logo]",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Shop.jsx <option> hydration", "issues": ["(carryover) Console hydration warning: '<span> cannot be a child of <option>' from Emergent's static-analyzer wrapping JSX expressions inside <option> with <span style='display:contents'>. Cosmetic only — UI fully functional."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Fix hero H1 alignment in /app/frontend/src/pages/Home.jsx. Recommended single-line fix: change the hero <section> from 'flex items-end' to a non-flex container. Concretely, replace `<section className=\"relative min-h-[92vh] flex items-end overflow-hidden grain\">` with `<section className=\"relative min-h-[92vh] overflow-hidden grain\">` and put 'flex items-end' (or use `pt-[60vh]` etc.) on an inner wrapper; OR keep the section as-is and add explicit `w-full` to the inner container-luxe div: `<div className=\"container-luxe w-full relative pb-24 md:pb-32 grid md:grid-cols-12 gap-8 items-end\">`. Either approach restores container-luxe to the same left-edge as the header (320 px on 1920 viewport), bringing hero H1 left to match brand-logo left within tolerance.",
+    "(Optional carryover) Silence Shop.jsx <option> hydration warning by passing literal-string children to <option> instead of {expression}.",
+    "(Optional hardening) Add login brute-force lockout."
+  ],
+  "critical_code_review_comments": [
+    "PublicLayout.jsx is now 16 lines, no useEffect/IntersectionObserver — clean and correct. Route-change rendering regression fully resolved.",
+    ".fade-up rule in index.css uses pure CSS animation 'srnFadeUp 0.9s ... forwards' — runs immediately on mount of every newly-rendered element after route change. This is the right pattern for client-side routing and avoids the IntersectionObserver-not-rebound bug from iter 2.",
+    "No sticky classes remain on Shop.jsx filter bar or on NutButterBuilder.jsx steps/live-preview sidebars — verified by DOM scan of all <main> descendants (stickyCount=0 on both pages).",
+    "Hero alignment fix: col-span widening to 'md:col-span-8 lg:col-span-7' is correct, but the underlying container-luxe centering is wrong inside the flex section (see RCA). Widening the column does not fix the container-itself-is-shifted root cause.",
+    "Header retains 'sticky top-0 z-50' which is the intended behaviour; only filter-bar and builder sidebars were de-stickied.",
+    "server.py still 845 lines (carryover): recommend splitting into route modules per the 700-line guideline."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (44/44)", "frontend": "~95% — all functional flows pass; only hero alignment off by 18.8 px"},
+  "test_credentials": "admin@silkroutenaturals.com / Silkroute@2026 ; customer@example.com / Customer@2026 — both verified working",
+  "seed_data_creation": "No new seed data created in iter 3; reused existing fixtures.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 3 critical regression (route-change fade-up rendering) is FIXED and verified — opacity=1 on all .fade-up elements after navigating Home->Shop->Our Story->Builder without refresh. Sticky removal on Shop filter and Builder sidebars is verified (stickyCount=0). The only remaining iter-3 issue is the hero alignment: 18.8 px shift caused by hero <section> being 'flex items-end' which makes container-luxe behave as a flex item and shrink, throwing off mx-auto centering. Suggested fix in action_items. Backend pytest still 44/44.",
+  "rca_of_issue": "Hero alignment bug RCA: The hero <section> in Home.jsx uses 'flex items-end' for vertical-bottom alignment of its content. Inside it, the same '.container-luxe' wrapper used by Header is treated as a flex item rather than a block-level child. With 'mx-auto max-w-[~1280px]' but no explicit 'width: 100%', the flex item shrinks toward its content's intrinsic width, then mx-auto centers the (smaller) flex item. Result: container-luxe.left = 338.8 px in hero vs 320 px in header (Δ 18.8 px on 1920 viewport). The col-span-7 div and inner padding (48 px) compose correctly on top of this offset, so the H1 inherits the same 18.8 px right-shift. Reproduction: open https://silk-experience.preview.emergentagent.com/ at 1920×1080 and run page.evaluate(\"() => Math.abs(document.querySelector('[data-testid=brand-logo]').getBoundingClientRect().left - document.querySelector('[data-testid=hero-title]').getBoundingClientRect().left)\") — returns 18.796875. Mitigation: either drop 'flex items-end' from the section and apply bottom-align via padding/inner wrapper, or add 'w-full' to the inner container-luxe div so the flex item spans full available width before mx-auto centering."
+}

@@ -45,18 +45,18 @@ export default function Home() {
           className="absolute inset-0 w-full h-full object-cover"
           loading="eager"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(115deg, hsl(var(--background)/0.96) 0%, hsl(var(--background)/0.78) 45%, hsl(var(--background)/0.4) 100%)" }} />
-        <div className="absolute inset-y-0 right-0 w-1/2 hidden md:block">
-          <img src="https://images.pexels.com/photos/5425018/pexels-photo-5425018.jpeg" alt="" className="w-full h-full object-cover opacity-90" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, hsl(var(--background)/0.85) 0%, hsl(var(--background)/0.15) 50%, hsl(var(--background)/0) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(115deg, hsl(var(--background)/0.96) 0%, hsl(var(--background)/0.82) 50%, hsl(var(--background)/0.45) 100%)" }} />
+        <div className="absolute inset-y-0 right-0 w-[42%] hidden lg:block pointer-events-none">
+          <img src="https://images.pexels.com/photos/5425018/pexels-photo-5425018.jpeg" alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, hsl(var(--background)/0.92) 0%, hsl(var(--background)/0.25) 35%, hsl(var(--background)/0) 70%)" }} />
         </div>
-        <div className="container-luxe relative pb-24 md:pb-36 grid md:grid-cols-12 gap-8 items-end">
-          <div className="md:col-span-7">
+        <div className="container-luxe relative pb-24 md:pb-32 grid md:grid-cols-12 gap-8 items-end">
+          <div className="md:col-span-8 lg:col-span-7">
             <div className="overline mb-6 fade-up">An editorial of slow luxury</div>
-            <h1 className="h-display text-5xl sm:text-6xl md:text-7xl lg:text-[96px] leading-[0.95] tracking-tighter fade-up" data-testid="hero-title">
+            <h1 className="h-display text-5xl sm:text-6xl md:text-7xl lg:text-[112px] xl:text-[128px] leading-[0.92] tracking-tighter fade-up" data-testid="hero-title">
               Treasures from<br />the ancient<br /><em className="not-italic" style={{ color: "hsl(var(--gold))" }}>Silk Route.</em>
             </h1>
-            <p className="mt-8 max-w-md text-base md:text-lg text-foreground/80 leading-relaxed fade-up font-light">
+            <p className="mt-10 max-w-lg text-base md:text-lg text-foreground/80 leading-relaxed fade-up font-light">
               Single-origin almonds, pistachios, hazelnuts, dates and saffron — sourced from five storied lands, hand-graded and slow-cured.
             </p>
             <div className="mt-10 flex flex-wrap gap-4 fade-up">
@@ -64,7 +64,7 @@ export default function Home() {
               <Link to="/our-story" className="btn-ghost" data-testid="hero-story-cta">The Journey</Link>
             </div>
           </div>
-          <div className="hidden md:block md:col-span-5">
+          <div className="hidden lg:block lg:col-span-5">
             <div className="bg-ivory/90 backdrop-blur-md border-l pl-8 py-6 ml-auto max-w-xs fade-up" style={{ borderColor: "hsl(var(--gold))" }}>
               <div className="overline mb-3">Est. on a heritage trail</div>
               <p className="font-serif text-2xl leading-snug">
