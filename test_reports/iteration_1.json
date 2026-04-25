@@ -1,0 +1,51 @@
+{
+  "summary": "Comprehensive backend + frontend testing of Silkroute Naturals luxury e-commerce. Backend: 35/35 pytest cases pass (100%) covering auth, products, coupons, custom-nut-butter pricing+create, orders w/ stock decrement & coupon, bookings, gifting, blog, banners, contact, reviews, analytics, and admin product/coupon CRUD with role enforcement. Frontend: home, shop, product detail, add-to-cart, cart drawer, login (customer + admin), checkout with WELCOME10 coupon, place order (mocked Razorpay), order appears in /account history, journal listing, admin dashboard with 10 nav sections + analytics charts, custom nut butter builder all render correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/login", "issue": "No brute-force lockout / rate-limit implemented (auth_testing.md mentions 5-fail lockout). Not blocking but recommended hardening."},
+      {"endpoint": "set_auth_cookies", "issue": "secure=True + samesite='none' is correct for cross-site preview, but means cookies will not work over plain HTTP locally. Acceptable for prod-ready preview."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Document <title>", "issue": "Page title is 'Emergent | Fullstack App' instead of 'Silkroute Naturals' branded title", "selector": "head>title", "priority": "LOW"},
+      {"component": "Shop.jsx select options", "issue": "React hydration warning: <span> rendered inside <option> (caused by Emergent's static-analyzer instrumentation injecting display:contents span into option text). Harmless in production build but pollutes console. Consider passing literal strings to <option> children rather than expression-wrapped variables.", "selector": "select option", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Global", "issues": ["Luxury palette beige/ivory + gold accent renders correctly", "Cormorant + Manrope fonts loaded", "Marquee origins ticker, hero backdrop map, route stops, and journal cards all visually consistent with luxury brief"]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Set <title>Silkroute Naturals — Single-Origin Dry Fruits</title> in /app/frontend/public/index.html (currently 'Emergent | Fullstack App').",
+    "(Optional) Replace `{ORIGINS.map(o => <option ...>{o}</option>)}` in Shop.jsx with plain children to silence hydration warning from instrumented build.",
+    "(Optional hardening) Add login rate-limit / brute-force lockout per /app/auth_testing.md guideline.",
+    "No functional bugs — app is production-ready for a mocked-payment preview."
+  ],
+  "critical_code_review_comments": [
+    "auth.py uses bcrypt + JWT correctly; bcrypt hashes start with $2b$. Cookies set as httpOnly, secure, samesite=none — appropriate for cross-site preview.",
+    "server.py is 770 lines and monolithic. Recommend splitting into routes/{auth,products,orders,admin,content}.py modules for maintainability per the 700-line guideline.",
+    "Mongo ObjectId is consistently excluded via projection {'_id': 0} on all reads — good.",
+    "Seed admin block correctly updates password hash if env password changed (idempotent).",
+    "All Pydantic input models present; input validation enforced.",
+    "CORS allow_origins=['*'] combined with allow_credentials=True is technically incorrect per spec (browsers require explicit origins with credentials). The allow_origin_regex='.*' workaround makes browsers accept it, but for production tighten to explicit origins. Current preview cookies still flow.",
+    "Frontend uses process.env.REACT_APP_BACKEND_URL via /lib/api.js — good.",
+    "data-testid coverage is excellent on hero CTA, add-to-cart, cart-checkout, login-submit, builder-step-*, nut-*, admin-nav-*, admin product/coupon save buttons.",
+    "Razorpay mock: order saves payment_status='paid' immediately — clearly labelled 'test mode — payment is mocked' on checkout UI."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py (created — 35 pytest cases)"
+  ],
+  "success_rate": {"backend": "100% (35/35)", "frontend": "100% on critical paths tested"},
+  "test_credentials": "admin@silkroutenaturals.com / Silkroute@2026 ; customer@example.com / Customer@2026 — both verified working",
+  "seed_data_creation": "Seeded data verified: 10 products, 3+ coupons (WELCOME10 confirmed), 4 blog posts, 2 banners. Test artefacts created during testing: 1 customer order (SR260425144843), 1 review, 1 booking, 1 gifting inquiry, 1 contact message, 1 custom nut butter order. All TEST_ prefixed.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend and core frontend flows are solid. If retesting, only minor cosmetic fixes (page title, hydration span warning) remain. Re-run pytest /app/backend/tests/backend_test.py for regression. Builder full 6-step flow add-to-cart was not asserted end-to-end via Playwright (only step rendering verified) — selectors builder-step-{0..5}, nut-{id}, flavor-{id}, builder-add-to-cart confirmed to exist; full multi-step UI walkthrough can be added.",
+  "rca_of_issues": "No functional issues. Minor cosmetic items only. Title is the default Emergent template title — needs replacement in index.html. The hydration warning originates from Emergent's webpack instrumentation injecting <span style='display:contents'> wrappers around dynamic JSX expressions; it is invisible to users but appears in dev-mode console."
+}
