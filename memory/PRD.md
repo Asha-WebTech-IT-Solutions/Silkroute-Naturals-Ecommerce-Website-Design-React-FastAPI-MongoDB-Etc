@@ -38,6 +38,12 @@ Production-ready luxury heritage e-commerce for **Silkroute Naturals** (https://
   - Graceful no-op (logs only) until SMTP env vars set
 - 44/44 backend pytest pass
 
+### Iteration 3 — 25 Apr 2026 (polish fixes)
+- **Hero alignment fix**: H1 now starts at exactly the same x-coord as the brand logo (verified 0px diff at 1920 viewport). Root cause was `flex items-end` on the hero `<section>` shrinking the inner `container-luxe`; fixed by adding `w-full` to the inner container. Hero typography also scaled up for editorial impact (`lg:text-[112px] xl:text-[128px]`).
+- **Route-change rendering bug fixed**: previously the JS `IntersectionObserver` in `PublicLayout` for `.fade-up` reveals never re-observed new elements after route change, so lower sections stayed at `opacity: 0` until full page refresh. Replaced with **pure-CSS animation** (`srnFadeUp`) that runs immediately on mount of every newly-rendered element. `PublicLayout` is now 16 lines, no useEffect.
+- **Sticky removed** on Shop filter bar AND on Nut Butter Builder steps + live-preview sidebars (Header retains its intentional sticky).
+- 44/44 backend pytest pass (regression clean).
+
 ## Test Credentials
 - Admin: `admin@silkroutenaturals.com` / `Silkroute@2026`
 - Customer: `customer@example.com` / `Customer@2026`

@@ -50,7 +50,7 @@ export default function Home() {
           <img src="https://images.pexels.com/photos/5425018/pexels-photo-5425018.jpeg" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, hsl(var(--background)/0.92) 0%, hsl(var(--background)/0.25) 35%, hsl(var(--background)/0) 70%)" }} />
         </div>
-        <div className="container-luxe relative pb-24 md:pb-32 grid md:grid-cols-12 gap-8 items-end">
+        <div className="container-luxe w-full relative pb-24 md:pb-32 grid md:grid-cols-12 gap-8 items-end">
           <div className="md:col-span-8 lg:col-span-7">
             <div className="overline mb-6 fade-up">An editorial of slow luxury</div>
             <h1 className="h-display text-5xl sm:text-6xl md:text-7xl lg:text-[112px] xl:text-[128px] leading-[0.92] tracking-tighter fade-up" data-testid="hero-title">
