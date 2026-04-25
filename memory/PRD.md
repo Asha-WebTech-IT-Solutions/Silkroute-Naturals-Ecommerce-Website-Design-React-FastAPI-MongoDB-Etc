@@ -1,80 +1,67 @@
 # Silkroute Naturals — Product Requirements
 
 ## Original Problem Statement
-Build a production-ready, scalable, premium luxury e-commerce web application for **Silkroute Naturals** (https://silkroutenaturals.com) — a luxury heritage superfood brand. ~10 premium SKUs initially. Must feel like a ₹1L+ luxury experience brand (Aesop / Forest Essentials / L'Occitane / Tata Cliq Luxury), NOT a typical dry fruit store. Silk Route storytelling, custom nut butter builder, offline experience center, scalable to 100+ products.
+Production-ready luxury heritage e-commerce for **Silkroute Naturals** (https://silkroutenaturals.com). 10 premium SKUs, Silk Route storytelling, custom nut butter builder, offline experience center, scalable. Must feel like ₹1L+ luxury (Aesop / Forest Essentials / L'Occitane / Tata Cliq Luxury).
 
 ## Stack
-- Backend: FastAPI + MongoDB (motor) + JWT (httpOnly cookie + Bearer)
-- Frontend: React (CRA) + React Router + Tailwind + shadcn/ui + Recharts + Sonner
-- Fonts: Cormorant Garamond (serif) + Manrope (sans)
-- Payments: Razorpay (MOCKED — keys to be added later)
+- React (CRA) + Tailwind + shadcn/ui + Recharts + Sonner + lucide-react
+- FastAPI + MongoDB (motor) + JWT (httpOnly cookies + Bearer)
+- Cormorant Garamond + Manrope fonts
+- Razorpay payments — MOCKED until keys arrive
+- SMTP mailer — wired via env, no-ops gracefully until credentials provided
 
-## User Personas
-1. **Discerning customer** — wants editorial storytelling, single-origin provenance, luxury feel
-2. **Corporate gifting buyer** — bulk orders, branded packaging
-3. **Atelier visitor** — books tasting sessions in Bengaluru
-4. **Admin / brand owner** — manages catalog, orders, content, banners, analytics
+## What's Implemented
 
-## What's Implemented (Phase 1 — 25 Apr 2026)
-### Storefront
-- [x] Home — hero with antique map, marquee, route stops, featured products, atelier CTA, experience center, charter quote
-- [x] Shop — grid with category/origin/sort filters
-- [x] Product Detail — gallery, origin story, benefits, reviews (with submission)
-- [x] Our Story — editorial narrative + 5 country stops
-- [x] Experience Center — booking form (date/time/party/type)
-- [x] Custom Nut Butter Builder — 6-step configurator with live pricing
-- [x] Corporate Gifting — bulk inquiry form
-- [x] Contact — form + map + atelier address
-- [x] Account — order history, sign-out, admin link
-- [x] Cart Drawer — qty/remove, subtotal
-- [x] Checkout — address, coupon validation, mock Razorpay, order placement
-- [x] Journal (Blog) — listing + detail with editorial layout
+### Iteration 1 — 25 Apr 2026 (initial MVP)
+- Storefront: Home, Shop, Product Detail, Our Story, Experience Center, Custom Nut Butter Builder (6-step), Corporate Gifting, Contact, Account, Cart Drawer, Checkout, Journal listing/detail
+- Admin Dashboard: Overview (Recharts analytics), Products CRUD, Orders, Customers, Coupons, Custom Orders, Bookings, Gifting Inquiries, Journal CMS, Banners
+- Auth: JWT cookie+Bearer (register/login/logout/me)
+- Seed: admin user, test customer, 10 luxury SKUs, 3 coupons, 4 blog posts, 2 banners
+- Stock decrement on order, aggregated analytics
+- 35/35 backend pytest pass
 
-### Admin Dashboard (10 sections)
-- [x] Overview — revenue, orders, customers, products + charts (revenue trend, top products)
-- [x] Products CRUD
-- [x] Orders — list + status update (confirmed → shipped → delivered)
-- [x] Customers
-- [x] Coupons CRUD + validation
-- [x] Custom Nut Butter Orders
-- [x] Bookings
-- [x] Gifting Inquiries
-- [x] Journal CMS
-- [x] Banners
-
-### Backend
-- [x] JWT auth (cookies + Bearer fallback) — register/login/logout/me
-- [x] 25+ API endpoints, all `/api/*` prefixed
-- [x] Seed: admin user, test customer, 10 luxury products, 3 coupons, 4 blog posts, 2 banners
-- [x] Stock decrement on order
-- [x] Aggregated analytics endpoint (revenue, top products, daily trend)
-
-### Tested
-- 35/35 backend pytest cases pass (100%)
-- Frontend critical paths verified
-
-## P0 / P1 / P2 Backlog
-### P0 (next sprint)
-- Live Razorpay integration (need user's Key ID + Secret)
-- Email notifications on order/booking (SendGrid/Resend)
-- Image upload to S3 for admin product creation (currently URL-only)
-
-### P1
-- Search bar in header
-- Wishlist
-- Forgot/Reset password flow
-- Brute-force lockout on login
-
-### P2
-- ERP / inventory deeper integration
-- Mobile app
-- Multi-currency
-- Subscription boxes ("Silkroute Society")
-- Loyalty / rewards
+### Iteration 2 — 25 Apr 2026 (premium polish + e-comm essentials)
+- **Hero redesign**: split-frame layout (cream copy block + luxury still-life on right) — text now perfectly legible
+- **Made with Emergent badge removed** from index.html
+- **ScrollToTop** on every route change (window.scrollTo on pathname change)
+- **SEO per page** via `useSEO` hook — sets `<title>`, `<meta name="description">`, og:*, twitter:*, canonical, JSON-LD (Organization on Home, Product schema on PDP, Article on blog)
+- **Search modal** — keyboard-accessible, debounced, popular-search chips, deep-links to product page
+- **Wishlist** — localStorage-backed, heart toggle on cards + PDP, badge count in header, dedicated `/wishlist` page with add-to-cart
+- **Forgot/Reset password** — `/forgot-password` & `/reset-password?token=...`, secure non-enumerating endpoint, 1h TTL token, single-use, MongoDB TTL index
+- **Mail notification system** (`mailer.py`):
+  - Welcome email on register
+  - Order confirmation (with itemized table)
+  - Order status updates (shipped/delivered/cancelled)
+  - Password reset link
+  - Booking received
+  - Beautiful HTML template with brand styling
+  - Graceful no-op (logs only) until SMTP env vars set
+- 44/44 backend pytest pass
 
 ## Test Credentials
 - Admin: `admin@silkroutenaturals.com` / `Silkroute@2026`
 - Customer: `customer@example.com` / `Customer@2026`
 
-## Mocked
-- Razorpay payment — orders mark `payment_status: paid` automatically with `payment_method: "razorpay_mock"`. Replace in `/app/backend/server.py:create_order` once keys arrive.
+## Mocked / Pending External
+- **Razorpay payment** — orders mark `payment_status: paid` automatically
+- **SMTP** — set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` in `/app/backend/.env`. Restart backend to activate. Code path already in place.
+
+## P0 / P1 / P2 Backlog
+### P0 (when creds arrive)
+- Provide SMTP credentials → enable real emails
+- Provide Razorpay live keys → enable real checkout
+
+### P1 (next features)
+- Backend-persisted wishlist (sync across devices when logged in)
+- Login brute-force lockout (per /app/auth_testing.md)
+- Order tracking page with shipment status
+- Admin email notifications (new order alert)
+- Newsletter signup → email capture form
+
+### P2 (growth)
+- Subscription / "Silkroute Society" recurring boxes
+- Loyalty / rewards
+- Multi-currency
+- Mobile app
+- ERP integration
+- AI-powered product recommendations
