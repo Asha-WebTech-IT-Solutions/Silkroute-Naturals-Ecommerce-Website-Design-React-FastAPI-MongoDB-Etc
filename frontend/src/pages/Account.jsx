@@ -3,8 +3,10 @@ import { useAuth } from "@/context/AuthContext";
 import { Navigate, Link, useNavigate } from "react-router-dom";
 import api from "@/lib/api";
 import { formatINR } from "@/lib/format";
+import { useSEO } from "@/lib/seo";
 
 export default function Account() {
+  useSEO({ title: "Account" });
   const { user, ready, logout } = useAuth();
   const nav = useNavigate();
   const [orders, setOrders] = useState([]);

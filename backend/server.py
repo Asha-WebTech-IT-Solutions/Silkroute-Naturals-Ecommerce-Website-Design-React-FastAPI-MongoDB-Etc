@@ -8,7 +8,7 @@ load_dotenv(ROOT_DIR / ".env")
 import os
 import uuid
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import List, Optional
 
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Response, Request
@@ -22,6 +22,7 @@ from auth import (
     decode_token, extract_token, get_current_user, get_admin_user, get_optional_user,
 )
 from seed_data import PRODUCTS, COUPONS, BLOG_POSTS, BANNERS
+import mailer
 
 # ---------- Logging ----------
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -169,6 +170,15 @@ class ContactIn(BaseModel):
     message: str
 
 
+class ForgotPasswordIn(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordIn(BaseModel):
+    token: str
+    password: str = Field(min_length=6)
+
+
 # ============================================================
 #                     STARTUP / SEEDING
 # ============================================================
@@ -180,6 +190,7 @@ async def startup():
     await db.coupons.create_index("code", unique=True)
     await db.blog_posts.create_index("slug", unique=True)
     await db.orders.create_index("user_id")
+    await db.password_reset_tokens.create_index("expires_at", expireAfterSeconds=0)
 
     # Seed admin
     admin_email = os.environ.get("ADMIN_EMAIL", "admin@silkroutenaturals.com")
@@ -267,6 +278,10 @@ async def register(payload: RegisterIn, response: Response):
     access = create_access_token(user["id"], email, "customer")
     refresh = create_refresh_token(user["id"])
     set_auth_cookies(response, access, refresh)
+    try:
+        mailer.send_welcome(email, payload.name)
+    except Exception as e:
+        logger.warning("welcome email failed: %s", e)
     return {"user": public_user(user), "access_token": access}
 
 
@@ -292,6 +307,51 @@ async def logout(response: Response):
 @api.get("/auth/me")
 async def me(user=Depends(get_current_user)):
     return user
+
+
+@api.post("/auth/forgot-password")
+async def forgot_password(payload: ForgotPasswordIn):
+    import secrets
+    email = payload.email.lower().strip()
+    user = await db.users.find_one({"email": email})
+    if user:
+        token = secrets.token_urlsafe(32)
+        expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+        await db.password_reset_tokens.insert_one({
+            "id": new_id(),
+            "token": token,
+            "user_id": user["id"],
+            "email": email,
+            "expires_at": expires_at,
+            "used": False,
+            "created_at": now_iso(),
+        })
+        frontend = os.environ.get("FRONTEND_URL", "https://silkroutenaturals.com")
+        link = f"{frontend}/reset-password?token={token}"
+        logger.info("[forgot-password] reset link for %s: %s", email, link)
+        try:
+            mailer.send_password_reset(email, link)
+        except Exception as e:
+            logger.warning("password reset email failed: %s", e)
+    return {"ok": True, "message": "If an account exists, a reset link has been sent."}
+
+
+@api.post("/auth/reset-password")
+async def reset_password(payload: ResetPasswordIn):
+    rec = await db.password_reset_tokens.find_one({"token": payload.token, "used": False})
+    if not rec:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset link")
+    expires_at = rec.get("expires_at")
+    if isinstance(expires_at, str):
+        expires_at = datetime.fromisoformat(expires_at)
+    if expires_at and expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at and datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="Reset link has expired")
+    await db.users.update_one({"id": rec["user_id"]}, {"$set": {"password_hash": hash_password(payload.password)}})
+    await db.password_reset_tokens.update_one({"_id": rec["_id"]}, {"$set": {"used": True}})
+    return {"ok": True}
+
 
 
 # ============================================================
@@ -512,6 +572,10 @@ async def create_order(payload: CheckoutIn, user=Depends(get_current_user)):
     for it in summary["items"]:
         if it.get("product_id") and not it.get("custom"):
             await db.products.update_one({"id": it["product_id"]}, {"$inc": {"stock": -it["quantity"]}})
+    try:
+        mailer.send_order_confirmation(user["email"], user["name"], order)
+    except Exception as e:
+        logger.warning("order email failed: %s", e)
     return order
 
 
@@ -531,6 +595,12 @@ async def update_order_status(order_id: str, body: dict):
     if status not in ("confirmed", "shipped", "delivered", "cancelled"):
         raise HTTPException(status_code=400, detail="Invalid status")
     await db.orders.update_one({"id": order_id}, {"$set": {"status": status}})
+    order = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if order:
+        try:
+            mailer.send_order_status(order["user_email"], order["user_name"], order["order_number"], status)
+        except Exception as e:
+            logger.warning("status email failed: %s", e)
     return {"ok": True}
 
 
@@ -546,6 +616,10 @@ async def create_booking(payload: BookingIn):
     b["created_at"] = now_iso()
     await db.bookings.insert_one(b)
     b.pop("_id", None)
+    try:
+        mailer.send_booking_received(b["email"], b["name"], b)
+    except Exception as e:
+        logger.warning("booking email failed: %s", e)
     return b
 
 

@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { formatApiErrorDetail } from "@/lib/format";
+import { useSEO } from "@/lib/seo";
 
 export default function Register() {
+  useSEO({ title: "Create Account" });
   const { register } = useAuth();
   const nav = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });

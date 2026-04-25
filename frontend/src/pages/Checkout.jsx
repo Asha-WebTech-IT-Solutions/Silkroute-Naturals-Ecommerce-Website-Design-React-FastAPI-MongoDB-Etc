@@ -4,9 +4,11 @@ import { useAuth } from "@/context/AuthContext";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import api from "@/lib/api";
 import { formatINR } from "@/lib/format";
+import { useSEO } from "@/lib/seo";
 import { toast } from "sonner";
 
 export default function Checkout() {
+  useSEO({ title: "Checkout" });
   const { items, subtotal, clear } = useCart();
   const { user, ready } = useAuth();
   const nav = useNavigate();

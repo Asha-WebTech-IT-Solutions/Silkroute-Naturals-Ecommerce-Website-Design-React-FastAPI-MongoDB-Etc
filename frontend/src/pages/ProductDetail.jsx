@@ -4,13 +4,16 @@ import api from "@/lib/api";
 import { formatINR } from "@/lib/format";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { Star, Plus, Minus } from "lucide-react";
+import { useWishlist } from "@/context/WishlistContext";
+import { useSEO } from "@/lib/seo";
+import { Star, Plus, Minus, Heart } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ProductDetail() {
   const { slug } = useParams();
   const { addItem } = useCart();
   const { user } = useAuth();
+  const { has, toggle } = useWishlist();
   const [p, setP] = useState(null);
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState(0);
@@ -18,6 +21,28 @@ export default function ProductDetail() {
 
   const load = () => api.get(`/products/${slug}`).then((r) => setP(r.data));
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [slug]);
+
+  useSEO(p ? {
+    title: p.name,
+    description: `${p.tagline}. ${p.description.slice(0, 140)}`,
+    image: p.images?.[0],
+    type: "product",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": p.name,
+      "description": p.description,
+      "image": p.images || [],
+      "brand": { "@type": "Brand", "name": "Silkroute Naturals" },
+      "offers": {
+        "@type": "Offer",
+        "price": p.price,
+        "priceCurrency": "INR",
+        "availability": p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      },
+      ...(p.avg_rating ? { "aggregateRating": { "@type": "AggregateRating", "ratingValue": p.avg_rating, "reviewCount": p.reviews?.length || 0 } } : {}),
+    },
+  } : { title: "Product" });
 
   if (!p) return <div className="container-luxe py-32 text-foreground/60">Loading...</div>;
 
@@ -93,6 +118,15 @@ export default function ProductDetail() {
             </div>
             <button onClick={() => { addItem(p, qty); toast.success(`${p.name} added to cart`); }} className="btn-primary flex-1" data-testid="add-to-cart-button">
               Add to Cart
+            </button>
+            <button
+              onClick={() => { toggle(p); toast.success(has(p.id) ? "Removed from wishlist" : "Saved to wishlist"); }}
+              className="p-4 border"
+              style={{ borderColor: "hsl(var(--line-strong))" }}
+              aria-label="wishlist"
+              data-testid="product-wishlist-toggle"
+            >
+              <Heart size={16} fill={has(p.id) ? "hsl(var(--gold))" : "none"} stroke={has(p.id) ? "hsl(var(--gold))" : "currentColor"} />
             </button>
           </div>
 

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "@/lib/api";
+import { useSEO } from "@/lib/seo";
 
 export function Journal() {
+  useSEO({ title: "The Journal", description: "Editorial notes from the Silkroute atelier — origin stories, harvests, recipes." });
   const [posts, setPosts] = useState([]);
   useEffect(() => { api.get("/blog").then((r) => setPosts(r.data || [])); }, []);
 
@@ -39,6 +41,22 @@ export function JournalDetail() {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
   useEffect(() => { api.get(`/blog/${slug}`).then((r) => setPost(r.data)); }, [slug]);
+  useSEO(post ? {
+    title: post.title,
+    description: post.excerpt,
+    image: post.cover_image,
+    type: "article",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": post.title,
+      "image": [post.cover_image],
+      "datePublished": post.published_at,
+      "author": { "@type": "Organization", "name": post.author },
+      "publisher": { "@type": "Organization", "name": "Silkroute Naturals" },
+      "description": post.excerpt,
+    },
+  } : { title: "Journal" });
   if (!post) return <div className="container-luxe py-32">Loading...</div>;
 
   return (

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
+import { useSEO } from "@/lib/seo";
 
 const SILK_ROUTE_STOPS = [
   { country: "Afghanistan", item: "Mamra Almonds", note: "Hindu Kush · sun-dried" },
@@ -12,6 +13,20 @@ const SILK_ROUTE_STOPS = [
 ];
 
 export default function Home() {
+  useSEO({
+    title: null,
+    description: "Single-origin almonds, pistachios, hazelnuts, dates and saffron from the ancient Silk Route. Slow-cured, hand-graded, luxury heritage superfoods.",
+    image: "https://images.unsplash.com/photo-1606914469633-fa3a3f4b62c2?w=1600",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Silkroute Naturals",
+      "url": "https://silkroutenaturals.com",
+      "logo": "https://silkroutenaturals.com/logo.png",
+      "sameAs": [],
+      "contactPoint": [{ "@type": "ContactPoint", "telephone": "+91-7406-995-999", "contactType": "customer service", "areaServed": "IN" }],
+    },
+  });
   const [products, setProducts] = useState([]);
   const [banner, setBanner] = useState(null);
 
@@ -23,21 +38,25 @@ export default function Home() {
   return (
     <div data-testid="home-page">
       {/* HERO */}
-      <section className="relative min-h-[88vh] flex items-end overflow-hidden grain">
+      <section className="relative min-h-[92vh] flex items-end overflow-hidden grain">
         <img
-          src={banner?.image || "https://images.pexels.com/photos/9494903/pexels-photo-9494903.jpeg"}
-          alt="Silk Route map"
+          src="https://images.pexels.com/photos/8465992/pexels-photo-8465992.jpeg"
+          alt="Silkroute Naturals — luxury dry fruits"
           className="absolute inset-0 w-full h-full object-cover"
           loading="eager"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(var(--background)/0.55) 0%, hsl(var(--background)/0.2) 40%, hsl(var(--background)/0.95) 100%)" }} />
-        <div className="container-luxe relative pb-20 md:pb-32 grid md:grid-cols-12 gap-8 items-end">
+        <div className="absolute inset-0" style={{ background: "linear-gradient(115deg, hsl(var(--background)/0.96) 0%, hsl(var(--background)/0.78) 45%, hsl(var(--background)/0.4) 100%)" }} />
+        <div className="absolute inset-y-0 right-0 w-1/2 hidden md:block">
+          <img src="https://images.pexels.com/photos/5425018/pexels-photo-5425018.jpeg" alt="" className="w-full h-full object-cover opacity-90" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, hsl(var(--background)/0.85) 0%, hsl(var(--background)/0.15) 50%, hsl(var(--background)/0) 100%)" }} />
+        </div>
+        <div className="container-luxe relative pb-24 md:pb-36 grid md:grid-cols-12 gap-8 items-end">
           <div className="md:col-span-7">
             <div className="overline mb-6 fade-up">An editorial of slow luxury</div>
-            <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[0.95] tracking-tighter fade-up" data-testid="hero-title">
+            <h1 className="h-display text-5xl sm:text-6xl md:text-7xl lg:text-[96px] leading-[0.95] tracking-tighter fade-up" data-testid="hero-title">
               Treasures from<br />the ancient<br /><em className="not-italic" style={{ color: "hsl(var(--gold))" }}>Silk Route.</em>
             </h1>
-            <p className="mt-8 max-w-md text-base text-foreground/75 leading-relaxed fade-up">
+            <p className="mt-8 max-w-md text-base md:text-lg text-foreground/80 leading-relaxed fade-up font-light">
               Single-origin almonds, pistachios, hazelnuts, dates and saffron — sourced from five storied lands, hand-graded and slow-cured.
             </p>
             <div className="mt-10 flex flex-wrap gap-4 fade-up">
@@ -46,7 +65,7 @@ export default function Home() {
             </div>
           </div>
           <div className="hidden md:block md:col-span-5">
-            <div className="border-l pl-8 ml-auto max-w-xs fade-up" style={{ borderColor: "hsl(var(--gold))" }}>
+            <div className="bg-ivory/90 backdrop-blur-md border-l pl-8 py-6 ml-auto max-w-xs fade-up" style={{ borderColor: "hsl(var(--gold))" }}>
               <div className="overline mb-3">Est. on a heritage trail</div>
               <p className="font-serif text-2xl leading-snug">
                 "What was once paid for in silk, we now pay for in care."

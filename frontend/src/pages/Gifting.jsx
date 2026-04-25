@@ -1,8 +1,10 @@
 import { useState } from "react";
 import api from "@/lib/api";
 import { toast } from "sonner";
+import { useSEO } from "@/lib/seo";
 
 export default function Gifting() {
+  useSEO({ title: "Corporate Gifting", description: "Hand-assembled gift boxes from 10 single-origin SKUs. Diwali, weddings, year-end. Pan-India delivery.", image: "https://images.unsplash.com/photo-1759563874665-ffa9dfbd0205" });
   const [form, setForm] = useState({ company: "", name: "", email: "", phone: "", quantity: 50, budget: 50000, occasion: "Diwali", message: "" });
   const [done, setDone] = useState(false);
 

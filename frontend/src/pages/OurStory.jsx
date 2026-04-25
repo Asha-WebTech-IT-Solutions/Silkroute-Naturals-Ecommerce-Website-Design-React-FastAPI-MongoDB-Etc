@@ -1,4 +1,7 @@
+import { useSEO } from "@/lib/seo";
+
 export default function OurStory() {
+  useSEO({ title: "Our Story", description: "A 2,000-year-old harvest, carried with care. The Silk Route narrative behind Silkroute Naturals — Afghanistan, Iran, Turkey, Morocco, India.", image: "https://images.pexels.com/photos/9494903/pexels-photo-9494903.jpeg" });
   const stops = [
     { country: "Afghanistan", img: "https://images.unsplash.com/photo-1633677491262-0a51b9851f46", text: "From the orchards of Kunduz, the Mamra almond — denser, oilier, intensely fragrant. The almond of Persian poetry." },
     { country: "Iran", img: "https://images.pexels.com/photos/34746904/pexels-photo-34746904.jpeg", text: "Rafsanjan has grown pistachios for 1,500 years. We import only the Akbari grade — large, naturally split, emerald inside." },

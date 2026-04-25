@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
+import { useSEO } from "@/lib/seo";
 
 const CATS = ["all", "almonds", "pistachios", "hazelnuts", "cashews", "dates", "spices", "walnuts", "dried-fruits"];
 const ORIGINS = ["all", "Afghanistan", "Iran", "Turkey", "India", "Morocco"];
 
 export default function Shop() {
+  useSEO({ title: "Shop the Collection", description: "Browse 10 single-origin harvests — Mamra almonds, Royal pistachios, Imperial hazelnuts, Medjool dates, Kashmiri saffron and more.", image: "https://images.pexels.com/photos/5425018/pexels-photo-5425018.jpeg" });
   const [products, setProducts] = useState([]);
   const [cat, setCat] = useState("all");
   const [origin, setOrigin] = useState("all");

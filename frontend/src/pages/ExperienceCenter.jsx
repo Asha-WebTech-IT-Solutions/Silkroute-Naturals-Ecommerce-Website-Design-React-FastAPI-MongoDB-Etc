@@ -1,8 +1,10 @@
 import { useState } from "react";
 import api from "@/lib/api";
 import { toast } from "sonner";
+import { useSEO } from "@/lib/seo";
 
 export default function ExperienceCenter() {
+  useSEO({ title: "Experience Center — Indiranagar", description: "Reserve a tasting flight, atelier tour or private workshop at our Bengaluru Experience Center.", image: "https://images.pexels.com/photos/35045845/pexels-photo-35045845.jpeg" });
   const [form, setForm] = useState({
     name: "", email: "", phone: "", visit_date: "", visit_time: "11:00", party_size: 2, experience_type: "tasting", notes: "",
   });

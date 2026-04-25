@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import api from "@/lib/api";
 import { formatINR } from "@/lib/format";
 import { useCart } from "@/context/CartContext";
+import { useSEO } from "@/lib/seo";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,6 +30,7 @@ const FLAVORS = [
 ];
 
 export default function NutButterBuilder() {
+  useSEO({ title: "Custom Nut Butter Atelier", description: "Design your own jar — choose your nuts, roast, flavors, texture and size. Stone-ground to order.", image: "https://images.pexels.com/photos/33657317/pexels-photo-33657317.jpeg" });
   const { addItem } = useCart();
   const [step, setStep] = useState(0);
   const [config, setConfig] = useState({

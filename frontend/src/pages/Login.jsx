@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { formatApiErrorDetail } from "@/lib/format";
+import { useSEO } from "@/lib/seo";
 
 export default function Login() {
+  useSEO({ title: "Sign In" });
   const { login } = useAuth();
   const nav = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
@@ -35,10 +37,10 @@ export default function Login() {
           <input required type="password" className="luxe-input" placeholder="Password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} data-testid="login-password" />
           <button disabled={loading} className="btn-primary w-full disabled:opacity-50" data-testid="login-submit">{loading ? "Signing in..." : "Sign In"}</button>
         </form>
-        <p className="mt-8 text-sm text-foreground/60">
-          New here?{" "}
-          <Link to="/register" className="hover-underline" data-testid="login-to-register">Create an account</Link>
-        </p>
+        <div className="mt-6 flex items-center justify-between text-sm text-foreground/60">
+          <Link to="/forgot-password" className="hover-underline" data-testid="login-forgot-link">Forgot password?</Link>
+          <Link to="/register" className="hover-underline" data-testid="login-to-register">Create account</Link>
+        </div>
       </div>
     </div>
   );

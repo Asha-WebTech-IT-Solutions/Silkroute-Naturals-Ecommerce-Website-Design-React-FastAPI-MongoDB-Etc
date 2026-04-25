@@ -1,8 +1,10 @@
 import { useState } from "react";
 import api from "@/lib/api";
 import { toast } from "sonner";
+import { useSEO } from "@/lib/seo";
 
 export default function Contact() {
+  useSEO({ title: "Contact", description: "Reach our atelier in Indiranagar, Bengaluru. +91 7406 995 999. hello@silkroutenaturals.com" });
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [done, setDone] = useState(false);
 
