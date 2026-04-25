@@ -1,0 +1,138 @@
+{
+  "theme_and_archetype": {
+    "theme": "light",
+    "archetype": "1 (Organic & Earthy) mixed with 5 (Jewel & Luxury)",
+    "reasoning": "The brand is a luxury heritage superfood platform emphasizing the Silk Route. It requires a grounded, authentic, warm, and highly premium editorial aesthetic. Dark tech modes feel too clinical; we need parchment, sand, ivory, and metallic gold accents to convey history and premium quality, akin to Aesop or Forest Essentials."
+  },
+  "colors": {
+    "background_primary": "#F9F6F0",
+    "background_secondary": "#F1EBE1",
+    "surface": "#FFFFFF",
+    "text_primary": "#2C2A26",
+    "text_secondary": "#5B564E",
+    "accent_gold": "#B5955C",
+    "accent_gold_hover": "#8A7042",
+    "border_subtle": "#E2D9CD",
+    "border_strong": "#C5BAA9",
+    "admin_base": "#FAFAFA",
+    "admin_sidebar": "#F9F6F0",
+    "error": "#963c3c",
+    "success": "#4b6c4b"
+  },
+  "typography": {
+    "heading_font": "Cormorant Garamond",
+    "body_font": "Manrope",
+    "h1": "text-5xl sm:text-6xl tracking-tighter leading-none font-medium",
+    "h2": "text-4xl sm:text-5xl tracking-tight leading-none font-medium",
+    "h3": "text-2xl sm:text-3xl tracking-tight font-medium",
+    "body": "text-base leading-relaxed tracking-wide font-light",
+    "overline": "text-xs tracking-[0.2em] uppercase font-semibold text-[#B5955C]",
+    "button": "text-sm tracking-[0.1em] uppercase font-medium",
+    "admin_heading": "font-sans text-xl font-semibold tracking-tight",
+    "admin_body": "text-sm text-[#2C2A26]"
+  },
+  "layout_and_spacing": {
+    "container": "max-w-7xl mx-auto px-6 md:px-12",
+    "section_padding": "py-24 md:py-32",
+    "grid_strategy": "Editorial bento grid. Mix spanning columns (col-span-8 and col-span-4) with generous gap-8 or gap-12 to create asymmetrical, magazine-like layouts.",
+    "borders": "Avoid heavy shadows. Use 1px solid borders (#E2D9CD) to separate sections, creating an architectural, print-like structure.",
+    "border_radius": "rounded-none or minimal rounded-sm (2px). Luxury feels sharp and deliberate, not bubbly."
+  },
+  "motion_and_interaction": {
+    "scroll": "Smooth scrolling via Lenis is MANDATORY for a premium feel.",
+    "hover_states": "Images should have a slow, subtle scale effect (scale-105 duration-1000 ease-out). Text links should use a delicate underline expansion.",
+    "transitions": "All page transitions and modal opens should be slow (duration-500) and smooth.",
+    "parallax": "Use Framer Motion to create a slight parallax effect on the background texture/map versus the foreground product images."
+  },
+  "components": {
+    "buttons": "Primary: bg-[#2C2A26] text-[#F9F6F0] hover:bg-[#B5955C] transition-colors duration-300 rounded-none px-8 py-4. Secondary: border border-[#C5BAA9] text-[#2C2A26] hover:bg-[#F1EBE1] rounded-none px-8 py-4.",
+    "navigation": "Sticky header, bg-[#F9F6F0]/90 backdrop-blur-md, minimal logo, centered links, cart/account on right. Top banner with 'AFGHANISTAN — IRAN — TURKEY — INDIA — MOROCCO' marquee.",
+    "product_cards": "No borders, no shadows. Large image with 4:5 aspect ratio (object-cover). Minimal typography below: Product Name (Serif), Origin (Overline), Price (Sans-serif).",
+    "nut_butter_builder": "Multi-step interactive configurator. Step 1: Base (Almonds/Cashews). Step 2: Roast (Raw/Roasted). Step 3: Flavors (Saffron/Honey). Step 4: Texture. Use large tactile imagery for each selection. Dynamic price counter fixed at the bottom.",
+    "admin_dashboard": "Use Shadcn components. Clean, high-density layout. Keep the sidebar warm (#F9F6F0) with Manrope font to maintain brand consistency even in the backend."
+  },
+  "testing": {
+    "instructions": "All interactive and key informational elements MUST include a data-testid attribute. Use kebab-case and role-based naming (e.g., data-testid='add-to-cart-button', data-testid='builder-step-1', data-testid='checkout-form-submit')."
+  },
+  "media": {
+    "hero_and_story": [
+      {
+        "url": "https://images.pexels.com/photos/9494903/pexels-photo-9494903.jpeg",
+        "description": "Vintage sepia map for Silk Route background"
+      },
+      {
+        "url": "https://images.pexels.com/photos/8465992/pexels-photo-8465992.jpeg",
+        "description": "Cream silk fabric texture for section backgrounds"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1711107762183-d99536fb7d6e",
+        "description": "Torn parchment for editorial overlapping elements"
+      }
+    ],
+    "products": [
+      {
+        "url": "https://images.pexels.com/photos/34746904/pexels-photo-34746904.jpeg",
+        "description": "Gourmet stuffed dates with pistachios and almonds"
+      },
+      {
+        "url": "https://images.pexels.com/photos/5425018/pexels-photo-5425018.jpeg",
+        "description": "Assorted dried fruits on a white plate"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1633677491262-0a51b9851f46",
+        "description": "Premium nuts in glass bowl"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1708335008926-e8b898da2ae9",
+        "description": "Premium red dates"
+      }
+    ],
+    "experience_center": [
+      {
+        "url": "https://images.pexels.com/photos/35045845/pexels-photo-35045845.jpeg",
+        "description": "Elegant interior boutique, warm lighting"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1769697064243-889f2e25d44a",
+        "description": "Ornate chandelier and warm displays"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1775021723698-b9afeaa084d1",
+        "description": "Luxury display shelves"
+      }
+    ],
+    "nut_butter_builder": [
+      {
+        "url": "https://images.pexels.com/photos/33657317/pexels-photo-33657317.jpeg",
+        "description": "Jar of creamy artisan almond butter with wooden spoon"
+      },
+      {
+        "url": "https://images.pexels.com/photos/5149339/pexels-photo-5149339.jpeg",
+        "description": "Homemade nut butter with spices on a board"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1654747781271-a2b6992c7b52",
+        "description": "Jar of almond butter on raw nuts"
+      }
+    ],
+    "corporate_gifting": [
+      {
+        "url": "https://images.unsplash.com/photo-1759563874665-ffa9dfbd0205",
+        "description": "Luxury neutral gift box with ribbon"
+      },
+      {
+        "url": "https://images.pexels.com/photos/15955941/pexels-photo-15955941.jpeg",
+        "description": "Elegant open velvet presentation box"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1580680849668-45d32df32e67",
+        "description": "Minimalist white premium packaging"
+      }
+    ]
+  },
+  "icons": {
+    "library": "@phosphor-icons/react",
+    "weight": "light",
+    "instructions": "Use light weight for a delicate, refined luxury feel. Do not use chunky solid icons."
+  }
+}
