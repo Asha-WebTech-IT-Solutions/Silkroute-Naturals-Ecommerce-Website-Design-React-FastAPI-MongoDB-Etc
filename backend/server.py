@@ -556,7 +556,7 @@ async def create_order(payload: CheckoutIn, user=Depends(get_optional_user)):
         guest_phone = (guest.get("phone") or "").strip()
         if not guest_email or not guest_name:
             raise HTTPException(status_code=400, detail="Guest checkout requires email and name")
-        order_user_id = "guest"
+        order_user_id = "guest_" + new_id()[:12]
         order_user_email = guest_email
         order_user_name = guest_name
         order_phone = guest_phone

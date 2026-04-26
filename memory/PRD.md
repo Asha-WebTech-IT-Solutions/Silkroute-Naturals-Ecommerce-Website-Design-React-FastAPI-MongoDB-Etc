@@ -12,62 +12,51 @@ Production-ready luxury heritage e-commerce for **Silkroute Naturals** (https://
 
 ## What's Implemented
 
-### Iteration 1 — 25 Apr 2026 (initial MVP)
-- Storefront: Home, Shop, Product Detail, Our Story, Experience Center, Custom Nut Butter Builder (6-step), Corporate Gifting, Contact, Account, Cart Drawer, Checkout, Journal listing/detail
-- Admin Dashboard: Overview (Recharts analytics), Products CRUD, Orders, Customers, Coupons, Custom Orders, Bookings, Gifting Inquiries, Journal CMS, Banners
-- Auth: JWT cookie+Bearer (register/login/logout/me)
-- Seed: admin user, test customer, 10 luxury SKUs, 3 coupons, 4 blog posts, 2 banners
-- Stock decrement on order, aggregated analytics
-- 35/35 backend pytest pass
+### Iter 1 (25 Apr) — Initial MVP
+13 storefront pages, 10-section admin dashboard, JWT auth, seed data, mailer-ready architecture. 35/35 backend pass.
 
-### Iteration 2 — 25 Apr 2026 (premium polish + e-comm essentials)
-- **Hero redesign**: split-frame layout (cream copy block + luxury still-life on right) — text now perfectly legible
-- **Made with Emergent badge removed** from index.html
-- **ScrollToTop** on every route change (window.scrollTo on pathname change)
-- **SEO per page** via `useSEO` hook — sets `<title>`, `<meta name="description">`, og:*, twitter:*, canonical, JSON-LD (Organization on Home, Product schema on PDP, Article on blog)
-- **Search modal** — keyboard-accessible, debounced, popular-search chips, deep-links to product page
-- **Wishlist** — localStorage-backed, heart toggle on cards + PDP, badge count in header, dedicated `/wishlist` page with add-to-cart
-- **Forgot/Reset password** — `/forgot-password` & `/reset-password?token=...`, secure non-enumerating endpoint, 1h TTL token, single-use, MongoDB TTL index
-- **Mail notification system** (`mailer.py`):
-  - Welcome email on register
-  - Order confirmation (with itemized table)
-  - Order status updates (shipped/delivered/cancelled)
-  - Password reset link
-  - Booking received
-  - Beautiful HTML template with brand styling
-  - Graceful no-op (logs only) until SMTP env vars set
-- 44/44 backend pytest pass
+### Iter 2 (25 Apr) — E-comm essentials
+SEO per page (`useSEO` hook), search modal, wishlist (localStorage), forgot/reset password (1h TTL token, non-enumerating), mail notification system (`mailer.py` with brand HTML template — graceful no-op until SMTP set), `ScrollToTop`, hero polish, removed "Made with Emergent" badge. 44/44.
 
-### Iteration 3 — 25 Apr 2026 (polish fixes)
-- **Hero alignment fix**: H1 now starts at exactly the same x-coord as the brand logo (verified 0px diff at 1920 viewport). Root cause was `flex items-end` on the hero `<section>` shrinking the inner `container-luxe`; fixed by adding `w-full` to the inner container. Hero typography also scaled up for editorial impact (`lg:text-[112px] xl:text-[128px]`).
-- **Route-change rendering bug fixed**: previously the JS `IntersectionObserver` in `PublicLayout` for `.fade-up` reveals never re-observed new elements after route change, so lower sections stayed at `opacity: 0` until full page refresh. Replaced with **pure-CSS animation** (`srnFadeUp`) that runs immediately on mount of every newly-rendered element. `PublicLayout` is now 16 lines, no useEffect.
-- **Sticky removed** on Shop filter bar AND on Nut Butter Builder steps + live-preview sidebars (Header retains its intentional sticky).
-- 44/44 backend pytest pass (regression clean).
+### Iter 3 (25 Apr) — Polish fixes
+Hero H1 pixel-aligned with logo (`w-full` fix), fixed route-change rendering (CSS animation replaces JS IntersectionObserver), removed sticky on Shop filter & Builder sidebars. 44/44.
+
+### Iter 4 (26 Apr) — Brand asset integration
+Replaced text wordmark with actual gold ornate camel-caravan logo PNG in header/footer/admin. Integrated 10 brand photos (storefront sign, store interior, product packaging) across Home, Experience Center, Gifting. 44/44.
+
+### Iter 5 (26 Apr) — Visual fixes + Guest Checkout
+- **Hero**: switched to clean cream-silk Pexels backdrop + product still-life split (no more store-interior logo conflict)
+- **Atelier section**: now uses `/product-detail.jpg` (no black bands)
+- **Storefront section**: text shifted to LEFT, image `object-position: right center` so headline doesn't overlap the gold sign
+- **Our Story hero**: cream-silk fabric overlay (no more orange map)
+- **Experience Center photo strip**: 3 cropped views of `/store-interior.jpg` (no random Pexels mountains)
+- **Guest Checkout**: `/api/orders` switched to `get_optional_user` with `guest: {email, name, phone}` fallback; frontend `/checkout` shows "Continue as guest" + "Sign in instead →" link; new `/order-confirmed/:number` public confirmation page; guest orders get unique `guest_<id>` user_id; mailer fires order confirmation to guest email
+- **49/49 backend pass** (added 5 TestGuestCheckout cases)
 
 ## Test Credentials
 - Admin: `admin@silkroutenaturals.com` / `Silkroute@2026`
 - Customer: `customer@example.com` / `Customer@2026`
 
 ## Mocked / Pending External
-- **Razorpay payment** — orders mark `payment_status: paid` automatically
-- **SMTP** — set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` in `/app/backend/.env`. Restart backend to activate. Code path already in place.
+- **Razorpay** — orders auto-mark `payment_status: paid`. Replace mock in `create_order` once keys arrive
+- **SMTP** — set `SMTP_HOST/PORT/USER/PASSWORD/FROM` in `/app/backend/.env`. Emails wire up automatically.
 
 ## P0 / P1 / P2 Backlog
-### P0 (when creds arrive)
-- Provide SMTP credentials → enable real emails
-- Provide Razorpay live keys → enable real checkout
+### P0
+- Provide SMTP credentials → real emails
+- Provide Razorpay keys → real checkout
 
-### P1 (next features)
-- Backend-persisted wishlist (sync across devices when logged in)
-- Login brute-force lockout (per /app/auth_testing.md)
-- Order tracking page with shipment status
-- Admin email notifications (new order alert)
-- Newsletter signup → email capture form
+### P1
+- Backend-persisted wishlist (sync across devices)
+- Login brute-force lockout
+- Order tracking page with shipment timeline
+- Admin order alert email
+- Newsletter email-capture form
 
-### P2 (growth)
+### P2
 - Subscription / "Silkroute Society" recurring boxes
 - Loyalty / rewards
 - Multi-currency
 - Mobile app
-- ERP integration
-- AI-powered product recommendations
+- AI product recommendations
+- Reviews with photo uploads
