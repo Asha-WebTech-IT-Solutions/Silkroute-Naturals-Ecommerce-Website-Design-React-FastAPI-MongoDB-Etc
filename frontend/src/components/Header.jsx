@@ -56,8 +56,7 @@ export default function Header() {
             </button>
 
             <Link to="/" className="flex items-center" data-testid="brand-logo">
-              <span className="font-serif text-2xl md:text-[28px] tracking-tight">Silkroute</span>
-              <span className="ml-2 overline">Naturals</span>
+              <img src="/silkroute-logo.png" alt="Silkroute Naturals" className="h-12 md:h-14 w-auto" />
             </Link>
 
             <nav className="hidden md:flex items-center gap-8">
@@ -103,7 +102,7 @@ export default function Header() {
         {mobile && (
           <div className="md:hidden fixed inset-0 z-50 bg-ivory" data-testid="mobile-menu">
             <div className="flex justify-between items-center p-6 border-b border-line">
-              <span className="font-serif text-xl">Silkroute</span>
+              <img src="/silkroute-logo.png" alt="Silkroute Naturals" className="h-10 w-auto" />
               <button onClick={() => setMobile(false)} data-testid="mobile-menu-close"><X size={20} /></button>
             </div>
             <nav className="flex flex-col p-6 gap-6">

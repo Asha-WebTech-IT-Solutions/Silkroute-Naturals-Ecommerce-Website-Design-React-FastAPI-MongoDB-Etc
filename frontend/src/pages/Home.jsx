@@ -40,16 +40,12 @@ export default function Home() {
       {/* HERO */}
       <section className="relative min-h-[92vh] flex items-end overflow-hidden grain">
         <img
-          src="https://images.pexels.com/photos/8465992/pexels-photo-8465992.jpeg"
-          alt="Silkroute Naturals — luxury dry fruits"
+          src="/store-interior.jpg"
+          alt="Silkroute Naturals — Indiranagar Experience Center"
           className="absolute inset-0 w-full h-full object-cover"
           loading="eager"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(115deg, hsl(var(--background)/0.96) 0%, hsl(var(--background)/0.82) 50%, hsl(var(--background)/0.45) 100%)" }} />
-        <div className="absolute inset-y-0 right-0 w-[42%] hidden lg:block pointer-events-none">
-          <img src="https://images.pexels.com/photos/5425018/pexels-photo-5425018.jpeg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, hsl(var(--background)/0.92) 0%, hsl(var(--background)/0.25) 35%, hsl(var(--background)/0) 70%)" }} />
-        </div>
+        <div className="absolute inset-0" style={{ background: "linear-gradient(115deg, hsl(var(--background)/0.94) 0%, hsl(var(--background)/0.75) 45%, hsl(var(--background)/0.25) 100%)" }} />
         <div className="container-luxe w-full relative pb-24 md:pb-32 grid md:grid-cols-12 gap-8 items-end">
           <div className="md:col-span-8 lg:col-span-7">
             <div className="overline mb-6 fade-up">An editorial of slow luxury</div>
@@ -57,7 +53,7 @@ export default function Home() {
               Treasures from<br />the ancient<br /><em className="not-italic" style={{ color: "hsl(var(--gold))" }}>Silk Route.</em>
             </h1>
             <p className="mt-10 max-w-lg text-base md:text-lg text-foreground/80 leading-relaxed fade-up font-light">
-              Single-origin almonds, pistachios, hazelnuts, dates and saffron — sourced from five storied lands, hand-graded and slow-cured.
+              Single-origin almonds, pistachios, hazelnuts, dates and saffron — sourced from five storied lands, hand-graded and slow-cured at our Bengaluru atelier.
             </p>
             <div className="mt-10 flex flex-wrap gap-4 fade-up">
               <Link to="/shop" className="btn-primary" data-testid="hero-shop-cta">Shop the Collection</Link>
@@ -65,7 +61,7 @@ export default function Home() {
             </div>
           </div>
           <div className="hidden lg:block lg:col-span-5">
-            <div className="bg-ivory/90 backdrop-blur-md border-l pl-8 py-6 ml-auto max-w-xs fade-up" style={{ borderColor: "hsl(var(--gold))" }}>
+            <div className="bg-ivory/92 backdrop-blur-md border-l pl-8 py-6 ml-auto max-w-xs fade-up" style={{ borderColor: "hsl(var(--gold))" }}>
               <div className="overline mb-3">Est. on a heritage trail</div>
               <p className="font-serif text-2xl leading-snug">
                 "What was once paid for in silk, we now pay for in care."
@@ -120,7 +116,7 @@ export default function Home() {
       <section className="section-pad" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--background))" }}>
         <div className="container-luxe grid md:grid-cols-2 gap-16 items-center">
           <div className="img-zoom">
-            <img src="https://images.pexels.com/photos/33657317/pexels-photo-33657317.jpeg" alt="Nut butter atelier" className="w-full aspect-[4/5] object-cover" />
+            <img src="/store-detail-2.jpg" alt="Nut butter atelier — Silkroute Naturals" className="w-full aspect-[4/5] object-cover" />
           </div>
           <div className="fade-up">
             <div className="overline" style={{ color: "hsl(var(--gold))" }}>The Atelier</div>
@@ -137,6 +133,31 @@ export default function Home() {
         </div>
       </section>
 
+      {/* IN STORE — categories from the actual atelier */}
+      <section className="section-pad">
+        <div className="container-luxe">
+          <div className="text-center max-w-2xl mx-auto mb-16 fade-up">
+            <div className="overline mb-4">Inside the atelier</div>
+            <h2 className="font-serif text-4xl md:text-5xl tracking-tight">More than dry fruits.</h2>
+            <p className="mt-6 text-foreground/70 leading-relaxed">A small house of fresh nut butters, cold-pressed oils, herbal elixirs and slow-craft milks — made by hand at our Indiranagar atelier.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "hsl(var(--line-strong))" }}>
+            {[
+              { label: "Fresh Nut Butters", note: "Stone-ground to order" },
+              { label: "Cold-Pressed Oils", note: "Almond · sesame · walnut" },
+              { label: "Herbal Elixirs", note: "Saffron, ashwagandha, tulsi" },
+              { label: "Nut Milks & Juices", note: "Made fresh daily" },
+            ].map((c) => (
+              <div key={c.label} className="bg-ivory p-8 fade-up">
+                <div className="overline" style={{ color: "hsl(var(--gold))" }}>House made</div>
+                <div className="font-serif text-2xl mt-3 leading-tight">{c.label}</div>
+                <div className="text-xs text-foreground/60 mt-2">{c.note}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* EXPERIENCE CENTER */}
       <section className="section-pad">
         <div className="container-luxe grid md:grid-cols-12 gap-10">
@@ -144,14 +165,28 @@ export default function Home() {
             <div className="overline mb-3">Indiranagar</div>
             <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-tight">The Experience Center.</h2>
             <p className="mt-6 text-foreground/70 leading-relaxed">
-              Our Bengaluru atelier is a quiet room of cold-press oil mills, fresh nut butter machines, and tasting flights. By appointment only.
+              Our Bengaluru atelier is a quiet room of cold-press oil mills, fresh nut butter machines, and tasting flights. Walk in by appointment.
             </p>
             <Link to="/experience-center" className="btn-primary mt-8 inline-flex" data-testid="experience-cta">Book a Tasting</Link>
           </div>
           <div className="md:col-span-7 grid grid-cols-2 gap-4">
-            <div className="img-zoom aspect-[3/4]"><img src="https://images.pexels.com/photos/35045845/pexels-photo-35045845.jpeg" alt="" className="w-full h-full object-cover" /></div>
-            <div className="img-zoom aspect-[3/4] mt-12"><img src="https://images.unsplash.com/photo-1769697064243-889f2e25d44a" alt="" className="w-full h-full object-cover" /></div>
+            <div className="img-zoom aspect-[3/4]"><img src="/store-detail-1.jpg" alt="" className="w-full h-full object-cover" /></div>
+            <div className="img-zoom aspect-[3/4] mt-12"><img src="/store-detail-3.jpg" alt="" className="w-full h-full object-cover" /></div>
           </div>
+        </div>
+      </section>
+
+      {/* STOREFRONT — gold logo on dark wall, brand moment */}
+      <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
+        <img src="/storefront-sign.jpg" alt="Silkroute Naturals storefront sign" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative text-center text-white container-luxe fade-up">
+          <div className="overline mb-6" style={{ color: "hsl(var(--gold))" }}>Visit us</div>
+          <h2 className="font-serif text-4xl md:text-6xl tracking-tighter leading-none">100 Ft Road, Indiranagar.</h2>
+          <p className="mt-6 text-white/75 max-w-md mx-auto">Tuesday — Sunday · 11:00 to 20:00. By appointment for tastings.</p>
+          <Link to="/contact" className="inline-flex mt-10 px-8 py-4 text-[12px] tracking-[0.18em] uppercase font-medium border" style={{ borderColor: "hsl(var(--gold))", color: "hsl(var(--gold))" }}>
+            Get Directions
+          </Link>
         </div>
       </section>
 

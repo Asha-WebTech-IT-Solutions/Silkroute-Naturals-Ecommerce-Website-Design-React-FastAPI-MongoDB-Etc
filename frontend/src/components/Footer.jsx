@@ -5,8 +5,7 @@ export default function Footer() {
     <footer className="mt-32 border-t" style={{ borderColor: "hsl(var(--line))" }} data-testid="site-footer">
       <div className="container-luxe py-20 grid md:grid-cols-4 gap-12">
         <div>
-          <div className="font-serif text-3xl tracking-tight">Silkroute</div>
-          <div className="overline mt-1">Naturals</div>
+          <img src="/silkroute-logo.png" alt="Silkroute Naturals" className="h-20 w-auto" />
           <p className="mt-6 text-sm leading-relaxed text-foreground/70 max-w-xs">
             Treasures from the ancient Silk Route — single-origin, slow-cured, hand-graded.
           </p>

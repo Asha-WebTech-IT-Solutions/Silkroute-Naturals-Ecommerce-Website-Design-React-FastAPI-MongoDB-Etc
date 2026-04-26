@@ -1,0 +1,48 @@
+{
+  "summary": "Iteration 4 (brand-asset integration) verification. Backend regression FULL PASS — pytest 44/44 (100%). All 10 brand asset URLs return HTTP 200 with non-zero size from preview URL. Header logo, footer logo, mobile-menu logo and admin-sidebar logo all render the actual silkroute-logo.png image (naturalWidth=618, naturalHeight=403, complete=true) at the requested heights. Home hero correctly uses /store-interior.jpg with readable H1 'Treasures from the ancient Silk Route'. Home 'Inside the atelier' section lists all 4 categories (Fresh Nut Butters, Cold-Pressed Oils, Herbal Elixirs, Nut Milks & Juices). Home storefront section uses /storefront-sign.jpg with '100 Ft Road, Indiranagar' headline. Experience Center hero uses /store-interior.jpg and bottom photo strip correctly uses store-detail-{1,3,4}.jpg. ONE VISUAL DEVIATION FROM SPEC: Gifting page hero still uses old Unsplash URL (`https://images.unsplash.com/photo-1759563874665-ffa9dfbd0205`) instead of /product-lineup.jpg as the iteration spec required. Side images on Gifting (product-detail.jpg + store-detail-2.jpg) are correctly using brand assets.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/login", "issue": "(carryover) No brute-force lockout / rate-limit; low priority."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Gifting.jsx hero <section>",
+        "issue": "Hero <img> still uses `https://images.unsplash.com/photo-1759563874665-ffa9dfbd0205` on line 24 instead of `/product-lineup.jpg` as required by iteration-4 spec. DOM scan on /gifting confirmed `img[src=\"/product-lineup.jpg\"]` is NOT present anywhere on the page. Side images on the same page (img src='/product-detail.jpg' and img src='/store-detail-2.jpg') ARE correctly wired, so this is a missed substitution on the hero only.",
+        "selector": "[data-testid=gifting-page] section:first-of-type img",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Shop.jsx <option> hydration", "issues": ["(carryover) <span> cannot be a child of <option> hydration warning — cosmetic only."]},
+      {"screen": "Home.jsx hero alignment", "issues": ["(carryover from iter 3) verify whether 18.8 px shift between brand-logo.left and hero H1.left is fixed in this iter — not re-measured this run because focus was on asset integration; recommend main agent re-test alignment after Gifting fix."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Fix /app/frontend/src/pages/Gifting.jsx line 24: replace `<img src=\"https://images.unsplash.com/photo-1759563874665-ffa9dfbd0205\" alt=\"\" className=\"absolute inset-0 w-full h-full object-cover\" />` with `<img src=\"/product-lineup.jpg\" alt=\"Silkroute Naturals — gift box product lineup\" className=\"absolute inset-0 w-full h-full object-cover\" />` to satisfy iter-4 brand-asset integration spec.",
+    "(Optional) After Gifting fix, also update useSEO image (line 7) from the same Unsplash URL to a brand-owned image so social cards reflect the real product photography.",
+    "(Optional carryover) Re-verify hero H1/brand-logo alignment from iter-3 after Gifting fix lands."
+  ],
+  "critical_code_review_comments": [
+    "Header.jsx (h-12 md:h-14) and Footer.jsx (h-20) and AdminLayout.jsx (h-12) all use the same /silkroute-logo.png — naturalWidth=618 confirms the actual ornate camel-caravan asset is loaded, not a placeholder. Aspect 618:403 ≈ 1.534, so at h-14 (56 px) the displayed width is ~86 px which matches what was measured (offsetWidth=86). Logo is crisp at 1.5x retina without needing srcset.",
+    "Mobile menu drawer correctly contains the logo image (3 instances of /silkroute-logo.png visible on mobile viewport: header logo + drawer logo + duplicate). All three have complete=true, naturalWidth=618.",
+    "Gifting.jsx hero is the only file in /app/frontend/src/pages/ that still references an Unsplash CDN URL after iter-4 — this is a clean miss, not an architectural issue. One-line fix.",
+    "All static brand assets are properly served from /app/frontend/public/ with correct Content-Type and 200 status; no asset is broken or missing.",
+    "useSEO image meta on Gifting.jsx and ExperienceCenter.jsx still points to external Unsplash/Pexels CDN — for brand-consistency in social-share cards, recommend swapping to brand-owned image URLs."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (44/44)", "frontend": "~95% — every iter-4 spec item passed except Gifting hero asset"},
+  "test_credentials": "admin@silkroutenaturals.com / Silkroute@2026 ; customer@example.com / Customer@2026 — both verified working",
+  "seed_data_creation": "No new seed data created in iter 4.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 4 brand-asset integration is 95% done. The only outstanding fix is Gifting.jsx hero img URL. After main agent applies the one-line Gifting fix, no full re-test is needed — main agent can self-verify by curling /gifting and grep'ing for product-lineup.jpg in DOM, or by running: page.evaluate(\"!!document.querySelector('img[src=\\\\\\\"/product-lineup.jpg\\\\\\\"]')\") on the /gifting page.",
+  "rca_of_issue": "Gifting hero asset miss RCA: In iter 4 the brand-asset substitution was applied to Home.jsx (hero + storefront), ExperienceCenter.jsx (hero + photo strip) and Gifting.jsx side-images (lines 43–44), but the Gifting hero <img> on line 24 was overlooked. The previous Unsplash URL (`https://images.unsplash.com/photo-1759563874665-ffa9dfbd0205`) is still loaded. Reproduction: GET /gifting → query `img[src=\"/product-lineup.jpg\"]` → returns null. Mitigation: change line 24 of /app/frontend/src/pages/Gifting.jsx to `<img src=\"/product-lineup.jpg\" alt=\"Silkroute Naturals — gift box product lineup\" className=\"absolute inset-0 w-full h-full object-cover\" />`. Asset already exists at /app/frontend/public/product-lineup.jpg (HTTP 200, 209524 bytes verified)."
+}

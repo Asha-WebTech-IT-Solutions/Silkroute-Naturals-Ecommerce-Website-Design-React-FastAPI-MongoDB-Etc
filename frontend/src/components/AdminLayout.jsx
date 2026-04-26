@@ -27,8 +27,8 @@ export default function AdminLayout() {
       <aside className="w-60 border-r" style={{ borderColor: "hsl(var(--line))", background: "hsl(var(--background))" }}>
         <div className="p-6 border-b" style={{ borderColor: "hsl(var(--line))" }}>
           <Link to="/" className="block">
-            <div className="font-serif text-2xl">Silkroute</div>
-            <div className="overline">Admin Atelier</div>
+            <img src="/silkroute-logo.png" alt="Silkroute Naturals" className="h-12 w-auto" />
+            <div className="overline mt-2">Admin Atelier</div>
           </Link>
         </div>
         <nav className="p-3 space-y-1">

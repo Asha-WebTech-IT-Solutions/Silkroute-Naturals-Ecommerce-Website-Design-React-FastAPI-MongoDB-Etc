@@ -22,12 +22,37 @@ export default function ExperienceCenter() {
 
   return (
     <div data-testid="experience-center-page">
-      <section className="relative h-[70vh] grain overflow-hidden">
-        <img src="https://images.pexels.com/photos/35045845/pexels-photo-35045845.jpeg" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(var(--background)/0.2), hsl(var(--background)/0.95))" }} />
-        <div className="container-luxe relative h-full flex flex-col justify-end pb-16">
-          <div className="overline mb-4">Indiranagar · Bengaluru</div>
+      <section className="relative h-[80vh] grain overflow-hidden">
+        <img src="/store-interior.jpg" alt="Silkroute Naturals — Indiranagar Experience Center" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(var(--foreground)/0.15) 0%, hsl(var(--foreground)/0.55) 100%)" }} />
+        <div className="container-luxe relative h-full flex flex-col justify-end pb-16 text-white">
+          <div className="overline mb-4" style={{ color: "hsl(var(--gold))" }}>Indiranagar · Bengaluru</div>
           <h1 className="font-serif text-5xl md:text-7xl tracking-tighter leading-none max-w-4xl">The Experience Center.</h1>
+          <p className="mt-6 max-w-md text-white/80">An artisanal dryfruits and nuts experience store. Cold-pressed oils, herbal elixirs, fresh nut butters and slow-craft milks.</p>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="py-20 border-b" style={{ borderColor: "hsl(var(--line))" }}>
+        <div className="container-luxe">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="overline mb-3">Inside the atelier</div>
+            <h2 className="font-serif text-4xl md:text-5xl tracking-tight">More than dry fruits.</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "hsl(var(--line-strong))" }}>
+            {[
+              { label: "Fresh Nut Butters", note: "Stone-ground to order — almond, cashew, pistachio, hazelnut" },
+              { label: "Cold-Pressed Oils", note: "Almond · sesame · walnut · in unrefined small batches" },
+              { label: "Herbal Elixirs", note: "Saffron, ashwagandha, tulsi, amla — bottled by hand" },
+              { label: "Nut Milks & Juices", note: "Made fresh daily, stocked through the morning" },
+            ].map((c) => (
+              <div key={c.label} className="bg-ivory p-8">
+                <div className="overline" style={{ color: "hsl(var(--gold))" }}>House made</div>
+                <div className="font-serif text-2xl mt-3 leading-tight">{c.label}</div>
+                <div className="text-xs text-foreground/60 mt-3 leading-relaxed">{c.note}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -37,7 +62,7 @@ export default function ExperienceCenter() {
             <div className="overline mb-3">A quiet room</div>
             <h2 className="font-serif text-4xl tracking-tight leading-tight">Cold-press oils. Fresh nut butters. Tasting flights.</h2>
             <p className="mt-6 text-foreground/75 leading-relaxed">
-              Step inside our atelier in Indiranagar. Watch the cold-press oil mill in motion. Build your own nut butter on our stone-grinder. Taste five origins side by side.
+              Step inside our atelier on 100 Ft Road. Watch the cold-press oil mill in motion. Build your own nut butter on our stone-grinder. Taste five origins side by side.
             </p>
             <ul className="mt-8 space-y-3 text-sm">
               <li><span style={{ color: "hsl(var(--gold))" }}>—</span> Cold-press oil mill (almond, sesame, walnut)</li>
@@ -76,7 +101,7 @@ export default function ExperienceCenter() {
       </section>
 
       <section className="grid md:grid-cols-3 gap-px" style={{ background: "hsl(var(--line-strong))" }}>
-        {["https://images.unsplash.com/photo-1769697064243-889f2e25d44a","https://images.unsplash.com/photo-1775021723698-b9afeaa084d1","https://images.pexels.com/photos/35045845/pexels-photo-35045845.jpeg"].map((src,i)=>(
+        {["/store-detail-1.jpg","/store-detail-3.jpg","/store-detail-4.jpg"].map((src,i)=>(
           <div key={i} className="img-zoom aspect-[4/5] bg-ivory"><img src={src} alt="" className="w-full h-full object-cover" /></div>
         ))}
       </section>

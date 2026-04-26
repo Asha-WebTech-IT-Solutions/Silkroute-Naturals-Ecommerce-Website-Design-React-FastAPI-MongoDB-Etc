@@ -40,8 +40,8 @@ export default function Gifting() {
             <li><span style={{ color: "hsl(var(--gold))" }} className="mr-2">—</span>Minimum 25 boxes · Volume rates</li>
           </ul>
           <div className="mt-12 grid grid-cols-2 gap-3">
-            <div className="img-zoom aspect-square"><img src="https://images.pexels.com/photos/15955941/pexels-photo-15955941.jpeg" alt="" className="w-full h-full object-cover" /></div>
-            <div className="img-zoom aspect-square"><img src="https://images.unsplash.com/photo-1580680849668-45d32df32e67" alt="" className="w-full h-full object-cover" /></div>
+            <div className="img-zoom aspect-square"><img src="/product-detail.jpg" alt="" className="w-full h-full object-cover" /></div>
+            <div className="img-zoom aspect-square"><img src="/store-detail-2.jpg" alt="" className="w-full h-full object-cover" /></div>
           </div>
         </div>
 
