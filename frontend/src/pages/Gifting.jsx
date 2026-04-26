@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useSEO } from "@/lib/seo";
 
 export default function Gifting() {
-  useSEO({ title: "Corporate Gifting", description: "Hand-assembled gift boxes from 10 single-origin SKUs. Diwali, weddings, year-end. Pan-India delivery.", image: "https://images.unsplash.com/photo-1759563874665-ffa9dfbd0205" });
+  useSEO({ title: "Corporate Gifting", description: "Hand-assembled gift boxes from 10 single-origin SKUs. Diwali, weddings, year-end. Pan-India delivery.", image: "/product-lineup.jpg" });
   const [form, setForm] = useState({ company: "", name: "", email: "", phone: "", quantity: 50, budget: 50000, occasion: "Diwali", message: "" });
   const [done, setDone] = useState(false);
 
@@ -21,7 +21,7 @@ export default function Gifting() {
   return (
     <div data-testid="gifting-page">
       <section className="relative h-[60vh] grain overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1759563874665-ffa9dfbd0205" alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <img src="/product-lineup.jpg" alt="Silkroute Naturals — gift box product lineup" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(var(--background)/0.3), hsl(var(--background)/0.95))" }} />
         <div className="container-luxe relative h-full flex flex-col justify-end pb-16">
           <div className="overline mb-4">Corporate · Festive · Bespoke</div>
