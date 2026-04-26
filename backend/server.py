@@ -102,6 +102,7 @@ class CheckoutIn(BaseModel):
     coupon_code: Optional[str] = None
     payment_method: str = "razorpay_mock"
     notes: Optional[str] = ""
+    guest: Optional[dict] = None  # { email, name, phone } for guest checkout
 
 
 class CouponIn(BaseModel):
@@ -545,14 +546,33 @@ async def calculate(payload: CheckoutIn, user=Depends(get_optional_user)):
 
 
 @api.post("/orders")
-async def create_order(payload: CheckoutIn, user=Depends(get_current_user)):
+async def create_order(payload: CheckoutIn, user=Depends(get_optional_user)):
     summary = await _calculate_order(payload.items, payload.coupon_code)
+    is_guest = user is None
+    if is_guest:
+        guest = (payload.guest or {})
+        guest_email = (guest.get("email") or "").strip().lower()
+        guest_name = (guest.get("name") or "").strip()
+        guest_phone = (guest.get("phone") or "").strip()
+        if not guest_email or not guest_name:
+            raise HTTPException(status_code=400, detail="Guest checkout requires email and name")
+        order_user_id = "guest"
+        order_user_email = guest_email
+        order_user_name = guest_name
+        order_phone = guest_phone
+    else:
+        order_user_id = user["id"]
+        order_user_email = user["email"]
+        order_user_name = user["name"]
+        order_phone = user.get("phone", "")
     order = {
         "id": new_id(),
         "order_number": "SR" + datetime.now(timezone.utc).strftime("%y%m%d") + str(uuid.uuid4().int)[:6],
-        "user_id": user["id"],
-        "user_email": user["email"],
-        "user_name": user["name"],
+        "user_id": order_user_id,
+        "user_email": order_user_email,
+        "user_name": order_user_name,
+        "phone": order_phone,
+        "is_guest": is_guest,
         "items": summary["items"],
         "subtotal": summary["subtotal"],
         "discount": summary["discount"],
@@ -561,19 +581,18 @@ async def create_order(payload: CheckoutIn, user=Depends(get_current_user)):
         "coupon_code": payload.coupon_code,
         "shipping_address": payload.shipping_address,
         "payment_method": payload.payment_method,
-        "payment_status": "paid",  # mock
+        "payment_status": "paid",
         "status": "confirmed",
         "notes": payload.notes,
         "created_at": now_iso(),
     }
     await db.orders.insert_one(order)
     order.pop("_id", None)
-    # decrement stock
     for it in summary["items"]:
         if it.get("product_id") and not it.get("custom"):
             await db.products.update_one({"id": it["product_id"]}, {"$inc": {"stock": -it["quantity"]}})
     try:
-        mailer.send_order_confirmation(user["email"], user["name"], order)
+        mailer.send_order_confirmation(order_user_email, order_user_name, order)
     except Exception as e:
         logger.warning("order email failed: %s", e)
     return order

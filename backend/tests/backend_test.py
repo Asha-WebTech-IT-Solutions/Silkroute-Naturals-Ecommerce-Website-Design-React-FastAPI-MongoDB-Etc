@@ -491,3 +491,103 @@ class TestMailerNoop:
         time.sleep(0.4)
         log = self._tail_log()
         assert "[mailer:noop]" in log or "[mailer]" in log
+
+
+
+# ---------- Iteration 5: Guest Checkout ----------
+class TestGuestCheckout:
+    def _shipping(self):
+        return {"line1": "1 Test", "city": "Mumbai", "state": "MH", "pincode": "400001", "country": "IN", "phone": "+91 9999999999"}
+
+    def _pick_product(self):
+        prods = requests.get(f"{API}/products", timeout=10).json()
+        return next(p for p in prods if p["stock"] > 0)
+
+    def _tail_log(self) -> str:
+        import glob
+        paths = sorted(glob.glob("/var/log/supervisor/backend.*.log"), key=os.path.getmtime, reverse=True)
+        out = ""
+        for p in paths[:2]:
+            try:
+                with open(p, "r", errors="ignore") as f:
+                    out += f.read()
+            except Exception:
+                pass
+        return out
+
+    def test_guest_checkout_success(self):
+        prod = self._pick_product()
+        guest_email = f"guest_{uuid.uuid4().hex[:6]}@example.com"
+        body = {
+            "items": [{"product_id": prod["id"], "quantity": 1}],
+            "shipping_address": self._shipping(),
+            "payment_method": "razorpay_mock",
+            "notes": "TEST_guest",
+            "guest": {"email": guest_email, "name": "Guest TEST", "phone": "+91 9000000003"},
+        }
+        # No auth at all
+        r = requests.post(f"{API}/orders", json=body, timeout=15)
+        assert r.status_code == 200, r.text
+        order = r.json()
+        assert order.get("is_guest") is True
+        assert order.get("user_email") == guest_email
+        assert order.get("user_id") == "guest"
+        assert order["order_number"].startswith("SR")
+        assert order["payment_status"] == "paid"
+        assert "_id" not in order
+        # Mailer noop log should mention guest email
+        time.sleep(0.5)
+        log = self._tail_log()
+        assert "[mailer:noop]" in log or guest_email in log
+
+    def test_guest_checkout_missing_email_400(self):
+        prod = self._pick_product()
+        body = {
+            "items": [{"product_id": prod["id"], "quantity": 1}],
+            "shipping_address": self._shipping(),
+            "payment_method": "razorpay_mock",
+            "guest": {"email": "", "name": "Only Name", "phone": ""},
+        }
+        r = requests.post(f"{API}/orders", json=body, timeout=15)
+        assert r.status_code == 400
+        d = r.json()
+        assert "Guest checkout requires email and name" in (d.get("detail") or "")
+
+    def test_guest_checkout_missing_name_400(self):
+        prod = self._pick_product()
+        body = {
+            "items": [{"product_id": prod["id"], "quantity": 1}],
+            "shipping_address": self._shipping(),
+            "payment_method": "razorpay_mock",
+            "guest": {"email": "x@example.com", "name": "", "phone": ""},
+        }
+        r = requests.post(f"{API}/orders", json=body, timeout=15)
+        assert r.status_code == 400
+
+    def test_guest_checkout_no_guest_object_400(self):
+        prod = self._pick_product()
+        body = {
+            "items": [{"product_id": prod["id"], "quantity": 1}],
+            "shipping_address": self._shipping(),
+            "payment_method": "razorpay_mock",
+        }
+        r = requests.post(f"{API}/orders", json=body, timeout=15)
+        assert r.status_code == 400
+        assert "Guest checkout requires email and name" in (r.json().get("detail") or "")
+
+    def test_authenticated_order_is_not_guest(self, customer_session):
+        prod = self._pick_product()
+        body = {
+            "items": [{"product_id": prod["id"], "quantity": 1}],
+            "shipping_address": self._shipping(),
+            "payment_method": "razorpay_mock",
+            "notes": "TEST_auth_order",
+            # guest object should be ignored when authenticated
+            "guest": {"email": "should-be-ignored@example.com", "name": "Ignored"},
+        }
+        r = customer_session.post(f"{API}/orders", json=body, timeout=15)
+        assert r.status_code == 200, r.text
+        order = r.json()
+        assert order.get("is_guest") is False
+        assert order.get("user_email") == CUSTOMER_EMAIL
+        assert order.get("user_id") and order["user_id"] != "guest"

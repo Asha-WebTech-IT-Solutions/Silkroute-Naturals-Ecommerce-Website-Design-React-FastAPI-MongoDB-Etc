@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { Navigate, useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api from "@/lib/api";
 import { formatINR } from "@/lib/format";
 import { useSEO } from "@/lib/seo";
@@ -16,12 +16,10 @@ export default function Checkout() {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [discount, setDiscount] = useState(0);
   const [address, setAddress] = useState({ line1: "", line2: "", city: "", state: "", pincode: "", country: "India" });
+  const [guest, setGuest] = useState({ email: "", name: "", phone: "" });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => { if (user) { /* prefill phone? */ } }, [user]);
-
   if (!ready) return <div className="container-luxe py-32">Loading...</div>;
-  if (!user) return <Navigate to="/login" replace />;
   if (items.length === 0) return (
     <div className="container-luxe py-32 text-center">
       <div className="font-serif text-3xl">Your cart is empty.</div>
@@ -29,6 +27,7 @@ export default function Checkout() {
     </div>
   );
 
+  const isGuest = !user;
   const shipping = subtotal >= 1499 ? 0 : 79;
   const total = Math.max(0, subtotal - discount + shipping);
 
@@ -46,14 +45,16 @@ export default function Checkout() {
 
   const placeOrder = async () => {
     if (!address.line1 || !address.city || !address.pincode) { toast.error("Please complete shipping address"); return; }
+    if (isGuest && (!guest.email || !guest.name)) { toast.error("Please enter your email and name to continue as guest"); return; }
     setLoading(true);
     try {
       const { data } = await api.post("/orders", {
         items, shipping_address: address, coupon_code: appliedCoupon?.code, payment_method: "razorpay_mock",
+        guest: isGuest ? guest : null,
       });
       clear();
       toast.success(`Order placed — ${data.order_number}`);
-      nav("/account");
+      nav(user ? "/account" : `/order-confirmed/${data.order_number}`, { state: { order: data } });
     } catch (e) {
       toast.error(e.response?.data?.detail || "Order failed");
     } finally { setLoading(false); }
@@ -61,9 +62,27 @@ export default function Checkout() {
 
   return (
     <div className="section-pad container-luxe grid md:grid-cols-12 gap-12" data-testid="checkout-page">
-      <div className="md:col-span-7 space-y-8">
+      <div className="md:col-span-7 space-y-10">
+        {isGuest && (
+          <div>
+            <div className="flex items-end justify-between mb-3">
+              <div>
+                <div className="overline mb-2">Step 1 — Contact</div>
+                <h2 className="font-serif text-3xl">Continue as guest</h2>
+              </div>
+              <Link to="/login" state={{ from: "/checkout" }} className="text-xs uppercase tracking-widest hover-underline" data-testid="checkout-signin-link">Sign in instead →</Link>
+            </div>
+            <p className="text-sm text-foreground/60 mb-5">We'll email your order confirmation here. No account required.</p>
+            <div className="grid grid-cols-2 gap-x-5 gap-y-4">
+              <input required type="email" className="luxe-input col-span-2" placeholder="Email" value={guest.email} onChange={(e) => setGuest({ ...guest, email: e.target.value })} data-testid="guest-email" />
+              <input required className="luxe-input col-span-1" placeholder="Full Name" value={guest.name} onChange={(e) => setGuest({ ...guest, name: e.target.value })} data-testid="guest-name" />
+              <input className="luxe-input col-span-1" placeholder="Phone (optional)" value={guest.phone} onChange={(e) => setGuest({ ...guest, phone: e.target.value })} data-testid="guest-phone" />
+            </div>
+          </div>
+        )}
+
         <div>
-          <div className="overline mb-3">Step 1</div>
+          <div className="overline mb-3">{isGuest ? "Step 2" : "Step 1"} — Shipping</div>
           <h2 className="font-serif text-3xl">Shipping address</h2>
           <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-4">
             <input required className="luxe-input col-span-2" placeholder="Address Line 1" value={address.line1} onChange={(e) => setAddress({ ...address, line1: e.target.value })} data-testid="checkout-line1" />
@@ -76,7 +95,7 @@ export default function Checkout() {
         </div>
 
         <div>
-          <div className="overline mb-3">Step 2</div>
+          <div className="overline mb-3">{isGuest ? "Step 3" : "Step 2"} — Payment</div>
           <h2 className="font-serif text-3xl">Payment</h2>
           <div className="mt-4 p-5 border flex items-center gap-3" style={{ borderColor: "hsl(var(--line))" }}>
             <input type="radio" defaultChecked /> <span>Razorpay (test mode — payment is mocked)</span>
@@ -85,7 +104,6 @@ export default function Checkout() {
         </div>
       </div>
 
-      {/* Summary */}
       <aside className="md:col-span-5 self-start md:sticky md:top-32 p-8" style={{ background: "hsl(var(--background-2))" }}>
         <div className="overline mb-2">Order summary</div>
         <h3 className="font-serif text-3xl">Your selection</h3>

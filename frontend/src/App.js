@@ -23,6 +23,7 @@ import { Journal, JournalDetail } from "@/pages/Journal";
 import Wishlist from "@/pages/Wishlist";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
+import OrderConfirmed from "@/pages/OrderConfirmed";
 
 import AdminLayout from "@/components/AdminLayout";
 import AdminOverview from "@/pages/admin/AdminOverview";
@@ -60,6 +61,7 @@ function App() {
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/account" element={<Account />} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order-confirmed/:number" element={<OrderConfirmed />} />
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/journal" element={<Journal />} />
                   <Route path="/journal/:slug" element={<JournalDetail />} />

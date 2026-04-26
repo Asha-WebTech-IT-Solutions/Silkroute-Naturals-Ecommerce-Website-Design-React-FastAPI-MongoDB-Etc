@@ -23,8 +23,8 @@ export default function ExperienceCenter() {
   return (
     <div data-testid="experience-center-page">
       <section className="relative h-[80vh] grain overflow-hidden">
-        <img src="/store-interior.jpg" alt="Silkroute Naturals — Indiranagar Experience Center" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(var(--foreground)/0.15) 0%, hsl(var(--foreground)/0.55) 100%)" }} />
+        <img src="/store-interior.jpg" alt="Silkroute Naturals — Indiranagar Experience Center" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "left center" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(20,18,15,0.85) 0%, rgba(20,18,15,0.55) 50%, rgba(20,18,15,0.2) 100%)" }} />
         <div className="container-luxe relative h-full flex flex-col justify-end pb-16 text-white">
           <div className="overline mb-4" style={{ color: "hsl(var(--gold))" }}>Indiranagar · Bengaluru</div>
           <h1 className="font-serif text-5xl md:text-7xl tracking-tighter leading-none max-w-4xl">The Experience Center.</h1>
@@ -101,8 +101,14 @@ export default function ExperienceCenter() {
       </section>
 
       <section className="grid md:grid-cols-3 gap-px" style={{ background: "hsl(var(--line-strong))" }}>
-        {["/store-detail-1.jpg","/store-detail-3.jpg","/store-detail-4.jpg"].map((src,i)=>(
-          <div key={i} className="img-zoom aspect-[4/5] bg-ivory"><img src={src} alt="" className="w-full h-full object-cover" /></div>
+        {[
+          { src: "/store-interior.jpg", pos: "left center" },
+          { src: "/store-interior.jpg", pos: "center 30%" },
+          { src: "/store-interior.jpg", pos: "right center" },
+        ].map((it, i) => (
+          <div key={i} className="img-zoom aspect-[4/5] bg-ivory overflow-hidden">
+            <img src={it.src} alt="" className="w-full h-full object-cover" style={{ objectPosition: it.pos }} />
+          </div>
         ))}
       </section>
     </div>

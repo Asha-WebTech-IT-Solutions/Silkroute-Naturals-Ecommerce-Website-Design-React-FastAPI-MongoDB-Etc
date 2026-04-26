@@ -12,9 +12,9 @@ export default function OurStory() {
 
   return (
     <div data-testid="our-story-page">
-      <section className="relative h-[70vh] grain overflow-hidden">
-        <img src="https://images.pexels.com/photos/9494903/pexels-photo-9494903.jpeg" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(var(--background)/0.3), hsl(var(--background)/0.95))" }} />
+      <section className="relative h-[70vh] grain overflow-hidden" style={{ background: "hsl(var(--background-2))" }}>
+        <img src="https://images.pexels.com/photos/8465992/pexels-photo-8465992.jpeg" alt="" className="absolute inset-0 w-full h-full object-cover opacity-50" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(var(--background-2)/0.5) 0%, hsl(var(--background-2)/0.95) 100%)" }} />
         <div className="container-luxe relative h-full flex flex-col justify-end pb-20">
           <div className="overline mb-4">Our story</div>
           <h1 className="font-serif text-5xl md:text-7xl lg:text-[96px] tracking-tighter leading-none max-w-4xl">A 2,000-year-old harvest, carried with care.</h1>

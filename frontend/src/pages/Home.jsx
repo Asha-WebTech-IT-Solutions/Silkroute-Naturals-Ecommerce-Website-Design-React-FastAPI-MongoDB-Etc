@@ -37,15 +37,19 @@ export default function Home() {
 
   return (
     <div data-testid="home-page">
-      {/* HERO */}
-      <section className="relative min-h-[92vh] flex items-end overflow-hidden grain">
+      {/* HERO — clean cream + product still life, no logo conflict */}
+      <section className="relative min-h-[92vh] flex items-end overflow-hidden grain" style={{ background: "hsl(var(--background-2))" }}>
         <img
-          src="/store-interior.jpg"
-          alt="Silkroute Naturals — Indiranagar Experience Center"
-          className="absolute inset-0 w-full h-full object-cover"
+          src="https://images.pexels.com/photos/8465992/pexels-photo-8465992.jpeg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
           loading="eager"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(115deg, hsl(var(--background)/0.94) 0%, hsl(var(--background)/0.75) 45%, hsl(var(--background)/0.25) 100%)" }} />
+        <div className="absolute inset-y-0 right-0 w-[45%] hidden lg:block">
+          <img src="https://images.pexels.com/photos/4499096/pexels-photo-4499096.jpeg" alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, hsl(var(--background-2)) 0%, hsl(var(--background-2)/0.4) 30%, transparent 70%)" }} />
+        </div>
+        <div className="absolute inset-0" style={{ background: "linear-gradient(115deg, hsl(var(--background)/0.85) 0%, hsl(var(--background)/0.55) 50%, transparent 100%)" }} />
         <div className="container-luxe w-full relative pb-24 md:pb-32 grid md:grid-cols-12 gap-8 items-end">
           <div className="md:col-span-8 lg:col-span-7">
             <div className="overline mb-6 fade-up">An editorial of slow luxury</div>
@@ -61,7 +65,7 @@ export default function Home() {
             </div>
           </div>
           <div className="hidden lg:block lg:col-span-5">
-            <div className="bg-ivory/92 backdrop-blur-md border-l pl-8 py-6 ml-auto max-w-xs fade-up" style={{ borderColor: "hsl(var(--gold))" }}>
+            <div className="bg-ivory/95 backdrop-blur-md border-l pl-8 py-6 ml-auto max-w-xs fade-up shadow-sm" style={{ borderColor: "hsl(var(--gold))" }}>
               <div className="overline mb-3">Est. on a heritage trail</div>
               <p className="font-serif text-2xl leading-snug">
                 "What was once paid for in silk, we now pay for in care."
@@ -112,11 +116,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ATELIER / Nut butter */}
+      {/* ATELIER / Nut butter — use clean product still life, object-center, no black bands */}
       <section className="section-pad" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--background))" }}>
         <div className="container-luxe grid md:grid-cols-2 gap-16 items-center">
-          <div className="img-zoom">
-            <img src="/store-detail-2.jpg" alt="Nut butter atelier — Silkroute Naturals" className="w-full aspect-[4/5] object-cover" />
+          <div className="img-zoom aspect-[4/5] overflow-hidden" style={{ background: "hsl(var(--foreground))" }}>
+            <img src="/product-detail.jpg" alt="Silkroute Naturals — fresh nut butter atelier" className="w-full h-full object-cover object-center" />
           </div>
           <div className="fade-up">
             <div className="overline" style={{ color: "hsl(var(--gold))" }}>The Atelier</div>
@@ -169,24 +173,27 @@ export default function Home() {
             </p>
             <Link to="/experience-center" className="btn-primary mt-8 inline-flex" data-testid="experience-cta">Book a Tasting</Link>
           </div>
-          <div className="md:col-span-7 grid grid-cols-2 gap-4">
-            <div className="img-zoom aspect-[3/4]"><img src="/store-detail-1.jpg" alt="" className="w-full h-full object-cover" /></div>
-            <div className="img-zoom aspect-[3/4] mt-12"><img src="/store-detail-3.jpg" alt="" className="w-full h-full object-cover" /></div>
+          <div className="md:col-span-7">
+            <div className="img-zoom aspect-[4/5] h-full overflow-hidden">
+              <img src="/store-interior.jpg" alt="Inside the Indiranagar atelier" className="w-full h-full object-cover" style={{ objectPosition: "center 30%" }} />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* STOREFRONT — gold logo on dark wall, brand moment */}
-      <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
-        <img src="/storefront-sign.jpg" alt="Silkroute Naturals storefront sign" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative text-center text-white container-luxe fade-up">
-          <div className="overline mb-6" style={{ color: "hsl(var(--gold))" }}>Visit us</div>
-          <h2 className="font-serif text-4xl md:text-6xl tracking-tighter leading-none">100 Ft Road, Indiranagar.</h2>
-          <p className="mt-6 text-white/75 max-w-md mx-auto">Tuesday — Sunday · 11:00 to 20:00. By appointment for tastings.</p>
-          <Link to="/contact" className="inline-flex mt-10 px-8 py-4 text-[12px] tracking-[0.18em] uppercase font-medium border" style={{ borderColor: "hsl(var(--gold))", color: "hsl(var(--gold))" }}>
-            Get Directions
-          </Link>
+      {/* STOREFRONT — gold logo on dark wall, side-aligned glass card so text doesn't overlap sign */}
+      <section className="relative h-[70vh] flex items-center overflow-hidden">
+        <img src="/storefront-sign.jpg" alt="Silkroute Naturals storefront sign — Indiranagar" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "right center" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.15) 100%)" }} />
+        <div className="container-luxe w-full relative">
+          <div className="max-w-md text-white fade-up">
+            <div className="overline mb-6" style={{ color: "hsl(var(--gold))" }}>Visit us</div>
+            <h2 className="font-serif text-4xl md:text-6xl tracking-tighter leading-[0.95]">100 Ft Road,<br/>Indiranagar.</h2>
+            <p className="mt-6 text-white/75">Tuesday — Sunday · 11:00 to 20:00. By appointment for tastings and private workshops.</p>
+            <Link to="/contact" className="inline-flex mt-10 px-8 py-4 text-[12px] tracking-[0.18em] uppercase font-medium border" style={{ borderColor: "hsl(var(--gold))", color: "hsl(var(--gold))" }}>
+              Get Directions
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -1,0 +1,40 @@
+{
+  "summary": "Iter 5 (Guest Checkout + visual fixes) — FULL PASS. Backend: 49/49 pytest cases pass (44 prior regression + 5 new TestGuestCheckout cases). All 4 guest-checkout backend scenarios verified: (a) POST /api/orders w/ no auth + valid guest{email,name,phone} -> 200, is_guest=true, user_id='guest', user_email=guest_email, mailer:noop logged for guest email; (b) missing guest.email -> 400 'Guest checkout requires email and name'; (c) missing guest.name -> 400; (d) missing guest object entirely -> 400; (e) authenticated POST /api/orders ignores guest payload, writes is_guest=false with logged-in user's email. Frontend: full e2e succeeded — Home → product card → add-to-cart-button → cart-checkout-button (drawer) → /checkout shows 'Continue as guest' UI with [data-testid=guest-email/guest-name/guest-phone/checkout-signin-link] visible; place-order with empty fields shows correct toasts ('Please complete shipping address' first, then once address filled, 'Please enter your email and name to continue as guest' for empty guest email — matches spec); placing order as guest with valid data redirects to /order-confirmed/SR260426263670 (NOT /login) and renders [data-testid=order-confirmed-page] with 'Thank you', order summary, and order-confirmed-number=#SR260426263670; direct visit to /order-confirmed/SR000123456 also renders the page. Logged-in customer @ /checkout: guest fields hidden (count=0), 'Continue as guest' heading absent, only Shipping Address + Payment shown. Visual: Home hero now uses Pexels cream silk fabric (8465992) — no store-interior clutter; hero-title 'Treasures from the ancient Silk Route.' renders cleanly. Atelier section uses /product-detail.jpg. Storefront section: storefront-sign.jpg with object-position '100% 50%' (right center) + h2 '100 Ft Road, Indiranagar.' positioned LEFT of viewport (left=368, right=816 of 1920 → left third). Our Story hero uses pexels 8465992 cream silk overlay; 2,000-year-old harvest headline reads cleanly (no orange map). Experience Center photo strip uses /store-interior.jpg cropped 3 ways (4 total store-interior.jpg images on /experience-center incl. hero). Server.py file ends cleanly at the CORS middleware with no orphan code. No SyntaxError in backend logs.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/login", "issue": "(carryover) No brute-force lockout / rate-limit; low priority."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Shop.jsx <option> hydration", "issues": ["(carryover) <span> cannot be a child of <option> hydration warning — cosmetic only, does not break Shop functionality."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "(Optional, cosmetic) Resolve Shop.jsx <span> in <option> hydration warning carried over from previous iterations."
+  ],
+  "critical_code_review_comments": [
+    "Checkout.jsx placeOrder logic order is correct: address validation runs before guest-email validation, so the toast 'Please enter your email and name to continue as guest' only fires when address is filled but guest email/name is empty. This matches the iter-5 spec precisely.",
+    "server.py /api/orders cleanly switched from get_current_user to get_optional_user with explicit guest fallback. is_guest, user_id='guest' and user_email=guest_email all serialized into Mongo + response (no _id leakage observed). Mailer noop logs the guest_email correctly.",
+    "OrderConfirmed.jsx is publicly routable (/order-confirmed/:number) — direct visit by URL works for both guest and logged-in flows. Good for transactional email links once SMTP is wired.",
+    "Home.jsx hero now layers two cream silk Pexels images (8465992 + 4499096) in a 7/5 split which removes the previous clash with the gold logo on store-interior.jpg. Hero text contrast is now strong (dark serif on cream).",
+    "ExperienceCenter.jsx photo strip array uses 3 entries of /store-interior.jpg with different objectPosition (left center / center 30% / right center) — clever way to get visual variety without needing 3 distinct asset files.",
+    "Frontend cart is a drawer (CartDrawer.jsx with data-testid=cart-checkout-button) — there is NO /cart route; navigating to /cart directly shows blank page since the route is undefined. Consider adding a /cart fallback route or redirect to home for users who paste /cart in URL bar (low priority — drawer UX is the primary path).",
+    "Server-side guest order creates a record with user_id='guest' (string literal). Recommend adding a unique guest_user_id (e.g., uuid prefixed 'guest_') so admin /api/orders listing can distinguish individual guest orders, and so /api/orders/mine never accidentally matches when a future feature filters by user_id='guest'."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100% (49/49)", "frontend": "100% — every iter-5 spec item passed"},
+  "test_credentials": "admin@silkroutenaturals.com / Silkroute@2026 ; customer@example.com / Customer@2026 — both verified working",
+  "seed_data_creation": "TestGuestCheckout creates ephemeral guest orders via POST /api/orders w/ random emails 'guest_<hex>@example.com' (no cleanup needed — orders persist as historical records). TestOrders previously created 1 customer order per run.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 5 closed cleanly. New backend test class is /app/backend/tests/backend_test.py::TestGuestCheckout (5 cases). Important note: Cart in this app is a DRAWER (CartDrawer.jsx), not a /cart route — to reach /checkout in playwright after add-to-cart-button click, click [data-testid=cart-checkout-button] inside the drawer (visible immediately after add-to-cart) OR navigate directly to /checkout (cart persists via context+localStorage). Order-confirmed page is publicly routable at /order-confirmed/:number. For mailer:noop verification, scan /var/log/supervisor/backend.*.log for '[mailer:noop]' lines.",
+  "rca_of_issue": "N/A — no bugs found. Iter-5 contract fully met."
+}
