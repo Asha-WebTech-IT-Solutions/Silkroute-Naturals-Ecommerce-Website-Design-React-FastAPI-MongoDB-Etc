@@ -37,29 +37,29 @@ export default function Home() {
 
   return (
     <div data-testid="home-page">
-      {/* HERO — clean cream + product still life, no logo conflict */}
-      <section className="relative min-h-[92vh] flex items-end overflow-hidden grain" style={{ background: "hsl(var(--background-2))" }}>
+      {/* HERO — clean cream + product still life, vertically centered, no logo conflict */}
+      <section className="relative min-h-[78vh] flex items-center overflow-hidden grain" style={{ background: "hsl(var(--background-2))" }}>
         <img
           src="https://images.pexels.com/photos/8465992/pexels-photo-8465992.jpeg"
           alt=""
           className="absolute inset-0 w-full h-full object-cover opacity-60"
           loading="eager"
         />
-        <div className="absolute inset-y-0 right-0 w-[45%] hidden lg:block">
+        <div className="absolute inset-y-0 right-0 w-[42%] hidden lg:block">
           <img src="https://images.pexels.com/photos/4499096/pexels-photo-4499096.jpeg" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, hsl(var(--background-2)) 0%, hsl(var(--background-2)/0.4) 30%, transparent 70%)" }} />
         </div>
         <div className="absolute inset-0" style={{ background: "linear-gradient(115deg, hsl(var(--background)/0.85) 0%, hsl(var(--background)/0.55) 50%, transparent 100%)" }} />
-        <div className="container-luxe w-full relative pb-24 md:pb-32 grid md:grid-cols-12 gap-8 items-end">
+        <div className="container-luxe w-full relative py-20 grid md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-8 lg:col-span-7">
-            <div className="overline mb-6 fade-up">An editorial of slow luxury</div>
-            <h1 className="h-display text-5xl sm:text-6xl md:text-7xl lg:text-[112px] xl:text-[128px] leading-[0.92] tracking-tighter fade-up" data-testid="hero-title">
+            <div className="overline mb-5 fade-up">An editorial of slow luxury</div>
+            <h1 className="h-display text-5xl sm:text-6xl md:text-7xl lg:text-[96px] xl:text-[112px] leading-[0.92] tracking-tighter fade-up" data-testid="hero-title">
               Treasures from<br />the ancient<br /><em className="not-italic" style={{ color: "hsl(var(--gold))" }}>Silk Route.</em>
             </h1>
-            <p className="mt-10 max-w-lg text-base md:text-lg text-foreground/80 leading-relaxed fade-up font-light">
+            <p className="mt-8 max-w-lg text-base md:text-lg text-foreground/80 leading-relaxed fade-up font-light">
               Single-origin almonds, pistachios, hazelnuts, dates and saffron — sourced from five storied lands, hand-graded and slow-cured at our Bengaluru atelier.
             </p>
-            <div className="mt-10 flex flex-wrap gap-4 fade-up">
+            <div className="mt-8 flex flex-wrap gap-4 fade-up">
               <Link to="/shop" className="btn-primary" data-testid="hero-shop-cta">Shop the Collection</Link>
               <Link to="/our-story" className="btn-ghost" data-testid="hero-story-cta">The Journey</Link>
             </div>
@@ -119,7 +119,7 @@ export default function Home() {
       {/* ATELIER / Nut butter — use clean product still life, object-center, no black bands */}
       <section className="section-pad" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--background))" }}>
         <div className="container-luxe grid md:grid-cols-2 gap-16 items-center">
-          <div className="img-zoom aspect-[4/5] overflow-hidden" style={{ background: "hsl(var(--foreground))" }}>
+          <div className="img-zoom aspect-[3/4] max-h-[560px] overflow-hidden" style={{ background: "hsl(var(--foreground))" }}>
             <img src="/product-detail.jpg" alt="Silkroute Naturals — fresh nut butter atelier" className="w-full h-full object-cover object-center" />
           </div>
           <div className="fade-up">
@@ -182,15 +182,15 @@ export default function Home() {
       </section>
 
       {/* STOREFRONT — gold logo on dark wall, side-aligned glass card so text doesn't overlap sign */}
-      <section className="relative h-[70vh] flex items-center overflow-hidden">
-        <img src="/storefront-sign.jpg" alt="Silkroute Naturals storefront sign — Indiranagar" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "right center" }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.15) 100%)" }} />
+      <section className="relative h-[55vh] md:h-[60vh] flex items-center overflow-hidden" style={{ background: "#0a0908" }}>
+        <img src="/storefront-sign.jpg" alt="Silkroute Naturals storefront sign — Indiranagar" className="absolute inset-0 w-full h-full object-cover opacity-90" style={{ objectPosition: "right center" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.65) 35%, rgba(0,0,0,0.15) 75%)" }} />
         <div className="container-luxe w-full relative">
           <div className="max-w-md text-white fade-up">
-            <div className="overline mb-6" style={{ color: "hsl(var(--gold))" }}>Visit us</div>
-            <h2 className="font-serif text-4xl md:text-6xl tracking-tighter leading-[0.95]">100 Ft Road,<br/>Indiranagar.</h2>
-            <p className="mt-6 text-white/75">Tuesday — Sunday · 11:00 to 20:00. By appointment for tastings and private workshops.</p>
-            <Link to="/contact" className="inline-flex mt-10 px-8 py-4 text-[12px] tracking-[0.18em] uppercase font-medium border" style={{ borderColor: "hsl(var(--gold))", color: "hsl(var(--gold))" }}>
+            <div className="overline mb-5" style={{ color: "hsl(var(--gold))" }}>Visit us</div>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tighter leading-[0.95]">100 Ft Road,<br/>Indiranagar.</h2>
+            <p className="mt-5 text-white/80 max-w-sm text-sm md:text-base">Tuesday — Sunday · 11:00 to 20:00. By appointment for tastings and private workshops.</p>
+            <Link to="/contact" className="inline-flex mt-8 px-8 py-4 text-[12px] tracking-[0.18em] uppercase font-medium border" style={{ borderColor: "hsl(var(--gold))", color: "hsl(var(--gold))" }}>
               Get Directions
             </Link>
           </div>

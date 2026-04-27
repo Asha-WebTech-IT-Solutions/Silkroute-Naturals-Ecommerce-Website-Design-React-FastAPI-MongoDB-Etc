@@ -11,7 +11,7 @@ import logging
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional
 
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Response, Request
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Response, Request, UploadFile, File
 from fastapi.encoders import jsonable_encoder
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -842,6 +842,89 @@ async def analytics(_=Depends(get_admin_user)):
         "top_products": top,
         "by_day": by_day,
     }
+
+
+# ============================================================
+
+@api.post("/uploads/image", dependencies=[Depends(get_admin_user)])
+async def upload_image(file: UploadFile = File(...)):
+    import base64
+    if not file.content_type or not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="File must be an image")
+    raw = await file.read()
+    if len(raw) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Image must be under 5MB")
+    b64 = base64.b64encode(raw).decode("ascii")
+    return {"url": f"data:{file.content_type};base64,{b64}"}
+
+
+@api.get("/orders/{order_id}")
+async def get_order(order_id: str, user=Depends(get_optional_user)):
+    o = await db.orders.find_one({"$or": [{"id": order_id}, {"order_number": order_id}]}, {"_id": 0})
+    if not o:
+        raise HTTPException(status_code=404, detail="Order not found")
+    if user is None or (o.get("user_id") != user["id"] and user.get("role") != "admin"):
+        # allow admin to view; others must be order owner
+        raise HTTPException(status_code=403, detail="Not allowed")
+    return o
+
+
+@api.put("/users/me")
+async def update_me(payload: dict, user=Depends(get_current_user)):
+    upd = {k: payload[k] for k in ("name", "phone") if k in payload and isinstance(payload[k], str)}
+    if upd:
+        await db.users.update_one({"id": user["id"]}, {"$set": upd})
+    fresh = await db.users.find_one({"id": user["id"]}, {"_id": 0, "password_hash": 0})
+    return fresh
+
+
+@api.put("/users/me/password")
+async def change_password(payload: dict, user=Depends(get_current_user)):
+    current = payload.get("current_password") or ""
+    new = payload.get("new_password") or ""
+    if len(new) < 6:
+        raise HTTPException(status_code=400, detail="New password must be at least 6 characters")
+    full = await db.users.find_one({"id": user["id"]})
+    if not full or not verify_password(current, full["password_hash"]):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    await db.users.update_one({"id": user["id"]}, {"$set": {"password_hash": hash_password(new)}})
+    return {"ok": True}
+
+
+@api.get("/users/me/addresses")
+async def list_addresses(user=Depends(get_current_user)):
+    fresh = await db.users.find_one({"id": user["id"]}, {"_id": 0})
+    return fresh.get("addresses", [])
+
+
+@api.post("/users/me/addresses")
+async def add_address(payload: dict, user=Depends(get_current_user)):
+    addr = {
+        "id": new_id(),
+        "label": payload.get("label", "Home"),
+        "line1": payload.get("line1", ""),
+        "line2": payload.get("line2", ""),
+        "city": payload.get("city", ""),
+        "state": payload.get("state", ""),
+        "pincode": payload.get("pincode", ""),
+        "country": payload.get("country", "India"),
+        "is_default": bool(payload.get("is_default", False)),
+    }
+    if not addr["line1"] or not addr["city"] or not addr["pincode"]:
+        raise HTTPException(status_code=400, detail="line1, city and pincode are required")
+    if addr["is_default"]:
+        await db.users.update_one(
+            {"id": user["id"]},
+            {"$set": {"addresses.$[].is_default": False}},
+        )
+    await db.users.update_one({"id": user["id"]}, {"$push": {"addresses": addr}})
+    return addr
+
+
+@api.delete("/users/me/addresses/{address_id}")
+async def delete_address(address_id: str, user=Depends(get_current_user)):
+    await db.users.update_one({"id": user["id"]}, {"$pull": {"addresses": {"id": address_id}}})
+    return {"ok": True}
 
 
 # ============================================================

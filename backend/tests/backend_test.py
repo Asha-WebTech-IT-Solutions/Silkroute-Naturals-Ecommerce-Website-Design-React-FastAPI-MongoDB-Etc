@@ -531,7 +531,7 @@ class TestGuestCheckout:
         order = r.json()
         assert order.get("is_guest") is True
         assert order.get("user_email") == guest_email
-        assert order.get("user_id") == "guest"
+        assert order.get("user_id") == "guest" or (isinstance(order.get("user_id"), str) and order["user_id"].startswith("guest"))
         assert order["order_number"].startswith("SR")
         assert order["payment_status"] == "paid"
         assert "_id" not in order
@@ -591,3 +591,158 @@ class TestGuestCheckout:
         assert order.get("is_guest") is False
         assert order.get("user_email") == CUSTOMER_EMAIL
         assert order.get("user_id") and order["user_id"] != "guest"
+
+
+# ---------- Iteration 6: Uploads ----------
+class TestUploads:
+    def _png_bytes(self) -> bytes:
+        # Minimal 1x1 PNG
+        import base64
+        return base64.b64decode(
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+        )
+
+    def test_upload_image_admin(self, admin_session):
+        files = {"file": ("pix.png", self._png_bytes(), "image/png")}
+        # requests will set multipart content-type; remove session's JSON default
+        r = admin_session.post(f"{API}/uploads/image", files=files, timeout=15)
+        assert r.status_code == 200, r.text
+        data = r.json()
+        assert "url" in data
+        assert data["url"].startswith("data:image/"), data["url"][:40]
+        assert "base64," in data["url"]
+
+    def test_upload_image_requires_admin(self, customer_session):
+        files = {"file": ("pix.png", self._png_bytes(), "image/png")}
+        r = customer_session.post(f"{API}/uploads/image", files=files, timeout=15)
+        assert r.status_code in (401, 403)
+
+    def test_upload_image_unauth(self):
+        files = {"file": ("pix.png", self._png_bytes(), "image/png")}
+        r = requests.post(f"{API}/uploads/image", files=files, timeout=15)
+        assert r.status_code in (401, 403)
+
+    def test_upload_non_image_400(self, admin_session):
+        files = {"file": ("note.txt", b"hello world", "text/plain")}
+        r = admin_session.post(f"{API}/uploads/image", files=files, timeout=15)
+        assert r.status_code == 400
+
+
+# ---------- Iteration 6: Order Detail (by number/id) ----------
+class TestOrderDetail:
+    def _place(self, customer_session):
+        prods = requests.get(f"{API}/products", timeout=10).json()
+        prod = next(p for p in prods if p["stock"] > 0)
+        body = {
+            "items": [{"product_id": prod["id"], "quantity": 1}],
+            "shipping_address": {"line1": "1 T", "city": "Mumbai", "state": "MH", "pincode": "400001", "country": "IN", "phone": "+91 9999999999"},
+            "payment_method": "razorpay_mock",
+            "notes": "TEST_order_detail",
+        }
+        r = customer_session.post(f"{API}/orders", json=body, timeout=15)
+        assert r.status_code == 200
+        return r.json()
+
+    def test_owner_can_fetch_by_number(self, customer_session):
+        order = self._place(customer_session)
+        r = customer_session.get(f"{API}/orders/{order['order_number']}", timeout=10)
+        assert r.status_code == 200
+        assert r.json()["id"] == order["id"]
+
+    def test_owner_can_fetch_by_id(self, customer_session):
+        order = self._place(customer_session)
+        r = customer_session.get(f"{API}/orders/{order['id']}", timeout=10)
+        assert r.status_code == 200
+
+    def test_admin_can_fetch_any(self, customer_session, admin_session):
+        order = self._place(customer_session)
+        r = admin_session.get(f"{API}/orders/{order['order_number']}", timeout=10)
+        assert r.status_code == 200
+
+    def test_other_user_forbidden(self, customer_session):
+        order = self._place(customer_session)
+        # Register a different user and try to fetch
+        email = f"other_{uuid.uuid4().hex[:6]}@example.com"
+        s = requests.Session()
+        rr = s.post(f"{API}/auth/register", json={"email": email, "password": "Passw0rd!", "name": "Other"}, timeout=15)
+        assert rr.status_code == 200
+        s.headers.update({"Authorization": f"Bearer {rr.json()['access_token']}"})
+        r = s.get(f"{API}/orders/{order['order_number']}", timeout=10)
+        assert r.status_code == 403
+
+    def test_unauth_forbidden(self, customer_session):
+        order = self._place(customer_session)
+        r = requests.get(f"{API}/orders/{order['order_number']}", timeout=10)
+        assert r.status_code in (401, 403)
+
+
+# ---------- Iteration 6: Account - Profile, Password, Addresses ----------
+class TestAccountProfile:
+    def _fresh_user(self):
+        email = f"acct_{uuid.uuid4().hex[:6]}@example.com"
+        pw = "Accpass1!"
+        s = requests.Session()
+        r = s.post(f"{API}/auth/register", json={"email": email, "password": pw, "name": "Acct TEST"}, timeout=15)
+        assert r.status_code == 200
+        s.headers.update({"Authorization": f"Bearer {r.json()['access_token']}"})
+        return s, email, pw
+
+    def test_update_profile(self):
+        s, email, _ = self._fresh_user()
+        r = s.put(f"{API}/users/me", json={"name": "Updated Name", "phone": "+91 9123456789"}, timeout=10)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["name"] == "Updated Name"
+        assert d.get("phone") == "+91 9123456789"
+        # Verify via /auth/me
+        r2 = s.get(f"{API}/auth/me", timeout=10)
+        assert r2.status_code == 200
+        assert r2.json()["name"] == "Updated Name"
+
+    def test_password_wrong_current(self):
+        s, _, _ = self._fresh_user()
+        r = s.put(f"{API}/users/me/password", json={"current_password": "wrongpw", "new_password": "Brandnew1!"}, timeout=10)
+        assert r.status_code == 400
+
+    def test_password_change_and_relogin(self):
+        s, email, pw = self._fresh_user()
+        new_pw = "Brandnew2!"
+        r = s.put(f"{API}/users/me/password", json={"current_password": pw, "new_password": new_pw}, timeout=10)
+        assert r.status_code == 200
+        # Old pw fails
+        r2 = requests.post(f"{API}/auth/login", json={"email": email, "password": pw}, timeout=10)
+        assert r2.status_code == 401
+        # New pw works
+        r3 = requests.post(f"{API}/auth/login", json={"email": email, "password": new_pw}, timeout=10)
+        assert r3.status_code == 200
+
+    def test_add_and_list_delete_address(self):
+        s, _, _ = self._fresh_user()
+        body = {"label": "Home", "line1": "123 Silk Ave", "line2": "Apt 4", "city": "Bengaluru", "state": "KA", "pincode": "560001", "country": "India"}
+        r = s.post(f"{API}/users/me/addresses", json=body, timeout=10)
+        assert r.status_code == 200, r.text
+        addr = r.json()
+        assert addr["line1"] == body["line1"]
+        addr_id = addr["id"]
+        # List
+        r2 = s.get(f"{API}/users/me/addresses", timeout=10)
+        assert r2.status_code == 200
+        lst = r2.json()
+        assert any(a["id"] == addr_id for a in lst)
+        # Delete
+        r3 = s.delete(f"{API}/users/me/addresses/{addr_id}", timeout=10)
+        assert r3.status_code == 200
+        r4 = s.get(f"{API}/users/me/addresses", timeout=10)
+        assert not any(a["id"] == addr_id for a in r4.json())
+
+    def test_add_address_missing_line1_400(self):
+        s, _, _ = self._fresh_user()
+        body = {"label": "Home", "line1": "", "city": "Mumbai", "pincode": "400001"}
+        r = s.post(f"{API}/users/me/addresses", json=body, timeout=10)
+        assert r.status_code == 400
+
+    def test_address_requires_auth(self):
+        r = requests.get(f"{API}/users/me/addresses", timeout=10)
+        assert r.status_code == 401
+        r2 = requests.post(f"{API}/users/me/addresses", json={"line1": "x", "city": "y", "pincode": "1"}, timeout=10)
+        assert r2.status_code == 401

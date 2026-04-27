@@ -7,6 +7,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import SearchModal from "@/components/SearchModal";
 
 const NAV = [
+  { to: "/", label: "Home", end: true },
   { to: "/shop", label: "Shop" },
   { to: "/our-story", label: "Our Story" },
   { to: "/nut-butter-builder", label: "Nut Butter Atelier" },
@@ -59,12 +60,13 @@ export default function Header() {
               <img src="/silkroute-logo.png" alt="Silkroute Naturals" className="h-12 md:h-14 w-auto" />
             </Link>
 
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden md:flex items-center gap-7">
               {NAV.map((n) => (
                 <NavLink
                   key={n.to}
                   to={n.to}
-                  data-testid={`nav-${n.to.replace("/", "")}`}
+                  end={n.end}
+                  data-testid={`nav-${n.to === "/" ? "home" : n.to.replace("/", "")}`}
                   className={({ isActive }) =>
                     `text-[12px] tracking-[0.18em] uppercase font-medium hover-underline ${isActive ? "text-foreground" : "text-foreground/70"}`
                   }

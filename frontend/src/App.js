@@ -17,13 +17,15 @@ import Gifting from "@/pages/Gifting";
 import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
-import Account from "@/pages/Account";
+import AccountLayout, { AccountOrders, AccountProfile, AccountAddresses, AccountPassword } from "@/pages/Account";
+import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
+import OrderDetail from "@/pages/OrderDetail";
+import OrderConfirmed from "@/pages/OrderConfirmed";
 import { Journal, JournalDetail } from "@/pages/Journal";
 import Wishlist from "@/pages/Wishlist";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
-import OrderConfirmed from "@/pages/OrderConfirmed";
 
 import AdminLayout from "@/components/AdminLayout";
 import AdminOverview from "@/pages/admin/AdminOverview";
@@ -59,12 +61,20 @@ function App() {
                   <Route path="/register" element={<Register />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
-                  <Route path="/account" element={<Account />} />
+                  <Route path="/cart" element={<Cart />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/order-confirmed/:number" element={<OrderConfirmed />} />
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/journal" element={<Journal />} />
                   <Route path="/journal/:slug" element={<JournalDetail />} />
+
+                  <Route path="/account" element={<AccountLayout />}>
+                    <Route index element={<AccountOrders />} />
+                    <Route path="profile" element={<AccountProfile />} />
+                    <Route path="addresses" element={<AccountAddresses />} />
+                    <Route path="password" element={<AccountPassword />} />
+                    <Route path="orders/:number" element={<OrderDetail />} />
+                  </Route>
                 </Route>
 
                 <Route path="/admin" element={<AdminLayout />}>
