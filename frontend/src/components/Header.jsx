@@ -1,9 +1,10 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { ShoppingBag, User, Search, Menu, X, Heart } from "lucide-react";
+import { ShoppingBag, User, Search, Menu, X, Heart, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { useTheme } from "@/context/ThemeContext";
 import SearchModal from "@/components/SearchModal";
 
 const NAV = [
@@ -20,10 +21,13 @@ export default function Header() {
   const { count, setOpen } = useCart();
   const { user } = useAuth();
   const { count: wishCount } = useWishlist();
+  const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const logoSrc = theme === "dark" ? "/logo-dark.jpg" : "/logo-light.jpg";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -48,7 +52,7 @@ export default function Header() {
         </div>
 
         <div
-          className={`backdrop-blur-md transition-colors duration-500 ${scrolled ? "bg-ivory/95" : "bg-ivory/85"}`}
+          className={`backdrop-blur-md transition-colors duration-500 ${scrolled ? "bg-background/95" : "bg-background/85"}`}
           style={{ borderBottom: "1px solid hsl(var(--line))" }}
         >
           <div className="container-luxe flex items-center justify-between h-20">
@@ -57,7 +61,7 @@ export default function Header() {
             </button>
 
             <Link to="/" className="flex items-center" data-testid="brand-logo">
-              <img src="/silkroute-logo.png" alt="Silkroute Naturals" className="h-12 md:h-14 w-auto" />
+              <img src={logoSrc} alt="Silk Route Naturals" className="h-12 md:h-14 w-auto" />
             </Link>
 
             <nav className="hidden md:flex items-center gap-7">
@@ -77,6 +81,9 @@ export default function Header() {
             </nav>
 
             <div className="flex items-center gap-5">
+              <button onClick={toggle} aria-label="toggle theme" data-testid="theme-toggle" title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
+                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
               <button onClick={() => setSearchOpen(true)} aria-label="search" data-testid="search-button"><Search size={18} /></button>
               <button onClick={() => navigate("/wishlist")} className="relative hidden md:inline-flex" aria-label="wishlist" data-testid="wishlist-button">
                 <Heart size={18} />
@@ -102,9 +109,9 @@ export default function Header() {
         </div>
 
         {mobile && (
-          <div className="md:hidden fixed inset-0 z-50 bg-ivory" data-testid="mobile-menu">
+          <div className="md:hidden fixed inset-0 z-50 bg-background" data-testid="mobile-menu">
             <div className="flex justify-between items-center p-6 border-b border-line">
-              <img src="/silkroute-logo.png" alt="Silkroute Naturals" className="h-10 w-auto" />
+              <img src={logoSrc} alt="Silk Route Naturals" className="h-10 w-auto" />
               <button onClick={() => setMobile(false)} data-testid="mobile-menu-close"><X size={20} /></button>
             </div>
             <nav className="flex flex-col p-6 gap-6">

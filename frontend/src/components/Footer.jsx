@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function Footer() {
+  const { theme } = useTheme();
+  const logoSrc = theme === "dark" ? "/logo-dark.jpg" : "/logo-light.jpg";
   return (
     <footer className="mt-32 border-t" style={{ borderColor: "hsl(var(--line))" }} data-testid="site-footer">
       <div className="container-luxe py-20 grid md:grid-cols-4 gap-12">
         <div>
-          <img src="/silkroute-logo.png" alt="Silkroute Naturals" className="h-20 w-auto" />
+          <img src={logoSrc} alt="Silk Route Naturals" className="h-20 w-auto" />
           <p className="mt-6 text-sm leading-relaxed text-foreground/70 max-w-xs">
-            Treasures from the ancient Silk Route — single-origin, slow-cured, hand-graded.
+            Treasures from the ancient Silk Route. Single-origin, slow-cured, hand-graded.
           </p>
         </div>
         <div>
@@ -30,10 +33,9 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <div className="overline mb-4">Atelier</div>
+          <div className="overline mb-4">Reach us</div>
           <p className="text-sm leading-relaxed text-foreground/70">
-            Indiranagar Experience Center<br/>
-            100 Ft Road, Bengaluru 560038
+            Bengaluru, India
           </p>
           <p className="text-sm mt-3">+91 7406 995 999</p>
           <p className="text-sm">hello@silkroutenaturals.com</p>
@@ -41,8 +43,8 @@ export default function Footer() {
       </div>
       <div className="border-t" style={{ borderColor: "hsl(var(--line))" }}>
         <div className="container-luxe py-6 flex flex-col md:flex-row justify-between text-xs text-foreground/60">
-          <span>© {new Date().getFullYear()} Silkroute Naturals. All rights reserved.</span>
-          <span className="overline">Crafted in India · Sourced from the Silk Route</span>
+          <span>© {new Date().getFullYear()} Silk Route Naturals. All rights reserved.</span>
+          <span className="overline">Crafted in India, sourced from the Silk Route</span>
         </div>
       </div>
     </footer>

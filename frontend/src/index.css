@@ -45,6 +45,39 @@
     --chart-4: 33 23% 72%;
     --chart-5: 120 18% 36%;
   }
+
+  /* Dark mode: black base, warm gold accents (aligned with Dark Mode Logo) */
+  .dark {
+    --background: 30 8% 5%;            /* near-black warm */
+    --background-2: 30 10% 9%;         /* softer panel */
+    --foreground: 40 30% 92%;          /* warm cream text */
+    --foreground-muted: 40 18% 72%;
+    --gold: 42 64% 60%;                /* brighter gold on black */
+    --gold-deep: 38 45% 48%;
+    --line: 30 8% 18%;
+    --line-strong: 30 8% 28%;
+    --surface: 30 10% 12%;
+    --error: 0 58% 58%;
+    --success: 120 25% 55%;
+
+    --card: 30 10% 9%;
+    --card-foreground: 40 30% 92%;
+    --popover: 30 10% 9%;
+    --popover-foreground: 40 30% 92%;
+    --primary: 40 30% 92%;
+    --primary-foreground: 30 8% 5%;
+    --secondary: 30 10% 12%;
+    --secondary-foreground: 40 30% 92%;
+    --muted: 30 10% 12%;
+    --muted-foreground: 40 18% 72%;
+    --accent: 42 64% 60%;
+    --accent-foreground: 30 8% 5%;
+    --destructive: 0 58% 58%;
+    --destructive-foreground: 40 30% 92%;
+    --border: 30 8% 18%;
+    --input: 30 8% 18%;
+    --ring: 42 64% 60%;
+  }
 }
 
 @layer base {
@@ -74,6 +107,8 @@
     background: hsl(var(--foreground)); color: hsl(var(--background));
   }
   .btn-primary:hover { background: hsl(var(--gold)); color: #fff; }
+  .dark .btn-primary { background: hsl(var(--gold)); color: hsl(var(--background)); }
+  .dark .btn-primary:hover { background: hsl(var(--foreground)); color: hsl(var(--background)); }
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 px-8 py-4 text-[12px] tracking-[0.18em] uppercase font-medium rounded-none transition-colors duration-300 border;
     border-color: hsl(var(--line-strong)); color: hsl(var(--foreground));
@@ -128,7 +163,7 @@
   }
 }
 
-/* fade-up entry — pure CSS, no observer needed */
+/* fade-up entry, pure CSS, no observer needed */
 .fade-up {
   opacity: 0;
   transform: translateY(20px);

@@ -22,7 +22,7 @@ export default function ResetPassword() {
       toast.success("Password updated. Please sign in.");
       nav("/login");
     } catch (err) {
-      toast.error(err.response?.data?.detail || "Reset failed — link may have expired");
+      toast.error(err.response?.data?.detail || "Reset failed, link may have expired");
     } finally { setLoading(false); }
   };
 

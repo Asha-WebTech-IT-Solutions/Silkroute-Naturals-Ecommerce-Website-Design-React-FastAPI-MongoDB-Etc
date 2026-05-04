@@ -196,7 +196,7 @@ export function AccountAddresses() {
               <div className="overline" style={{ color: a.is_default ? "hsl(var(--gold))" : undefined }}>{a.label}{a.is_default ? " · default" : ""}</div>
               <div className="text-sm mt-2 leading-relaxed">
                 {a.line1}{a.line2 && `, ${a.line2}`}<br />
-                {a.city}{a.state && `, ${a.state}`} — {a.pincode}<br />
+                {a.city}{a.state && `, ${a.state}`}, {a.pincode}<br />
                 {a.country}
               </div>
             </div>

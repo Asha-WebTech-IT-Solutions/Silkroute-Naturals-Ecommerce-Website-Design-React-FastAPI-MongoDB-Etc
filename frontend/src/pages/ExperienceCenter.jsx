@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useSEO } from "@/lib/seo";
 
 export default function ExperienceCenter() {
-  useSEO({ title: "Experience Center — Indiranagar", description: "Reserve a tasting flight, atelier tour or private workshop at our Bengaluru Experience Center.", image: "https://images.pexels.com/photos/35045845/pexels-photo-35045845.jpeg" });
+  useSEO({ title: "Experience Center, Indiranagar", description: "Reserve a tasting flight, atelier tour or private workshop at our Bengaluru Experience Center.", image: "https://images.pexels.com/photos/35045845/pexels-photo-35045845.jpeg" });
   const [form, setForm] = useState({
     name: "", email: "", phone: "", visit_date: "", visit_time: "11:00", party_size: 2, experience_type: "tasting", notes: "",
   });
@@ -23,7 +23,7 @@ export default function ExperienceCenter() {
   return (
     <div data-testid="experience-center-page">
       <section className="relative h-[80vh] grain overflow-hidden">
-        <img src="/store-interior.jpg" alt="Silkroute Naturals — Indiranagar Experience Center" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "left center" }} />
+        <img src="/store-interior.jpg" alt="Silkroute Naturals, Indiranagar Experience Center" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "left center" }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(20,18,15,0.85) 0%, rgba(20,18,15,0.55) 50%, rgba(20,18,15,0.2) 100%)" }} />
         <div className="container-luxe relative h-full flex flex-col justify-end pb-16 text-white">
           <div className="overline mb-4" style={{ color: "hsl(var(--gold))" }}>Indiranagar · Bengaluru</div>
@@ -41,9 +41,9 @@ export default function ExperienceCenter() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "hsl(var(--line-strong))" }}>
             {[
-              { label: "Fresh Nut Butters", note: "Stone-ground to order — almond, cashew, pistachio, hazelnut" },
+              { label: "Fresh Nut Butters", note: "Stone-ground to order, almond, cashew, pistachio, hazelnut" },
               { label: "Cold-Pressed Oils", note: "Almond · sesame · walnut · in unrefined small batches" },
-              { label: "Herbal Elixirs", note: "Saffron, ashwagandha, tulsi, amla — bottled by hand" },
+              { label: "Herbal Elixirs", note: "Saffron, ashwagandha, tulsi, amla, bottled by hand" },
               { label: "Nut Milks & Juices", note: "Made fresh daily, stocked through the morning" },
             ].map((c) => (
               <div key={c.label} className="bg-ivory p-8">
@@ -65,10 +65,10 @@ export default function ExperienceCenter() {
               Step inside our atelier on 100 Ft Road. Watch the cold-press oil mill in motion. Build your own nut butter on our stone-grinder. Taste five origins side by side.
             </p>
             <ul className="mt-8 space-y-3 text-sm">
-              <li><span style={{ color: "hsl(var(--gold))" }}>—</span> Cold-press oil mill (almond, sesame, walnut)</li>
-              <li><span style={{ color: "hsl(var(--gold))" }}>—</span> Stone-ground nut butter station</li>
-              <li><span style={{ color: "hsl(var(--gold))" }}>—</span> Curated tasting flight · 5 origins · 50 mins</li>
-              <li><span style={{ color: "hsl(var(--gold))" }}>—</span> Private workshops on request</li>
+              <li><span style={{ color: "hsl(var(--gold))" }}>·</span> Cold-press oil mill (almond, sesame, walnut)</li>
+              <li><span style={{ color: "hsl(var(--gold))" }}>·</span> Stone-ground nut butter station</li>
+              <li><span style={{ color: "hsl(var(--gold))" }}>·</span> Curated tasting flight · 5 origins · 50 mins</li>
+              <li><span style={{ color: "hsl(var(--gold))" }}>·</span> Private workshops on request</li>
             </ul>
           </div>
 

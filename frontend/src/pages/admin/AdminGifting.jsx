@@ -20,7 +20,7 @@ export default function AdminGifting() {
                 <td className="p-4 font-serif">{g.company}</td>
                 <td className="p-4"><div>{g.name}</div><div className="text-xs text-foreground/60">{g.email} · {g.phone}</div></td>
                 <td className="p-4">{g.quantity}</td>
-                <td className="p-4">{g.budget ? formatINR(g.budget) : "—"}</td>
+                <td className="p-4">{g.budget ? formatINR(g.budget) : "-"}</td>
                 <td className="p-4">{g.occasion}</td>
               </tr>
             ))}

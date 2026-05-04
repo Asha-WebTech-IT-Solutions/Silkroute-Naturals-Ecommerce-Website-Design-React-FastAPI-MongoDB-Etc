@@ -30,8 +30,19 @@ Replaced text wordmark with actual gold ornate camel-caravan logo PNG in header/
 - **Storefront section**: text shifted to LEFT, image `object-position: right center` so headline doesn't overlap the gold sign
 - **Our Story hero**: cream-silk fabric overlay (no more orange map)
 - **Experience Center photo strip**: 3 cropped views of `/store-interior.jpg` (no random Pexels mountains)
-- **Guest Checkout**: `/api/orders` switched to `get_optional_user` with `guest: {email, name, phone}` fallback; frontend `/checkout` shows "Continue as guest" + "Sign in instead →" link; new `/order-confirmed/:number` public confirmation page; guest orders get unique `guest_<id>` user_id; mailer fires order confirmation to guest email
+- **Guest Checkout**: `/api/orders` switched to `get_optional_user` with `guest: {email, name, phone}` fallback; frontend `/checkout` shows "Continue as guest" + "Sign in instead" link; new `/order-confirmed/:number` public confirmation page; guest orders get unique `guest_<id>` user_id; mailer fires order confirmation to guest email
 - **49/49 backend pass** (added 5 TestGuestCheckout cases)
+
+### Iter 7 (4 May) — Client feedback: branding + content + dark mode
+- **Hero banner**: replaced AI-generated split hero with client-provided `/banner-desktop.png` (1568x672) + `/banner-mobile.jpg` (1536x1024) via `<picture>` element. Legacy hero retained behind `SHOW_LEGACY_HERO=false` feature flag (no code deletion).
+- **Light/Dark mode toggle**: new `ThemeContext` + `.dark` CSS token overrides (black bg, cream text, brighter gold). Toggle button (Moon/Sun) in header; state persisted in `localStorage` as `srn-theme`.
+- **Dynamic logos**: header + footer swap between `/logo-light.jpg` (gold on ivory) and `/logo-dark.jpg` (gold on black) based on theme.
+- **Value props strip**: new 4-column row (Pure & Natural, Authentic Ingredients, Timeless Traditions, Ethically Sourced) mirroring the banner iconography.
+- **Removed from homepage**: Experience Center section + "100 Ft Road, Indiranagar" section (gated behind `SHOW_EXPERIENCE_SECTION`/`SHOW_STOREFRONT_ADDRESS_SECTION` flags, kept for rollback).
+- **Copy rewrite**: Our Story rewritten to remove "we pay above market", "families, not factories", "never bleach, never sulphur, never gloss" fabricated claims; replaced with grounded, human prose. Home hero tagline, atelier, quote, route-stop notes all rewritten.
+- **Em-dash cleanup**: automated Python pass across all `.js/.jsx/.css` files — time ranges (`Tue — Sun`) converted to `Tue to Sun`, bullet dashes to `·`, prose ` — ` to `, `, placeholders to `-`. Zero em-dashes remain.
+- **Brand name**: standardised as "Silk Route Naturals" (with space) matching logo in SEO title, OG meta, footer, aria labels.
+- **Hostinger deployment Q&A**: user confirmed frontend-only on Hostinger Node.js. Pending user decisions for backend host + MongoDB Atlas setup.
 
 ## Test Credentials
 - Admin: `admin@silkroutenaturals.com` / `Silkroute@2026`

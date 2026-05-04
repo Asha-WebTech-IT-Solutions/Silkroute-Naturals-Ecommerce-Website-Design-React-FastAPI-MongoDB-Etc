@@ -106,7 +106,7 @@ export default function ProductDetail() {
           <div className="my-8 border-t border-b py-6" style={{ borderColor: "hsl(var(--line))" }}>
             <div className="overline mb-4">Notes</div>
             <ul className="space-y-2 text-sm">
-              {p.benefits?.map((b) => <li key={b} className="flex items-start gap-2"><span style={{ color: "hsl(var(--gold))" }}>—</span>{b}</li>)}
+              {p.benefits?.map((b) => <li key={b} className="flex items-start gap-2"><span style={{ color: "hsl(var(--gold))" }}>·</span>{b}</li>)}
             </ul>
           </div>
 
@@ -166,7 +166,7 @@ export default function ProductDetail() {
                   {Array(5).fill(0).map((_, i) => <Star key={i} size={14} fill={i < r.rating ? "hsl(var(--gold))" : "none"} stroke="hsl(var(--gold))" />)}
                 </div>
                 <div className="font-serif text-xl">{r.title}</div>
-                <div className="text-xs text-foreground/60 mt-1">— {r.user_name}</div>
+                <div className="text-xs text-foreground/60 mt-1">- {r.user_name}</div>
                 <p className="mt-3 text-sm text-foreground/80">{r.body}</p>
               </div>
             ))}

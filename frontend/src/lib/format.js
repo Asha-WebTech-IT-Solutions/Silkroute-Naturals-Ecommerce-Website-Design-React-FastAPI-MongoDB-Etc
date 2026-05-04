@@ -1,5 +1,5 @@
 export function formatINR(n) {
-  if (n == null || isNaN(Number(n))) return "—";
+  if (n == null || isNaN(Number(n))) return "-";
   return "₹" + Number(n).toLocaleString("en-IN", { maximumFractionDigits: 0 });
 }
 

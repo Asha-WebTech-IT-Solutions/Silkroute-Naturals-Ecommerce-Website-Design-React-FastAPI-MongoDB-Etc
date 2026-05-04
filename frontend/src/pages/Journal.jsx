@@ -4,7 +4,7 @@ import api from "@/lib/api";
 import { useSEO } from "@/lib/seo";
 
 export function Journal() {
-  useSEO({ title: "The Journal", description: "Editorial notes from the Silkroute atelier — origin stories, harvests, recipes." });
+  useSEO({ title: "The Journal", description: "Editorial notes from the Silkroute atelier, origin stories, harvests, recipes." });
   const [posts, setPosts] = useState([]);
   useEffect(() => { api.get("/blog").then((r) => setPosts(r.data || [])); }, []);
 

@@ -24,7 +24,7 @@ export default function Contact() {
         <div className="container-luxe">
           <div className="overline mb-4">Stay in touch</div>
           <h1 className="font-serif text-5xl md:text-7xl tracking-tighter leading-none">Contact.</h1>
-          <p className="mt-6 max-w-md text-foreground/70">We'd love to hear from you — about an order, a private tasting, a custom gift, or simply to talk dry fruits.</p>
+          <p className="mt-6 max-w-md text-foreground/70">We'd love to hear from you, about an order, a private tasting, a custom gift, or simply to talk dry fruits.</p>
         </div>
       </section>
 
@@ -35,13 +35,13 @@ export default function Contact() {
             <ContactBlock icon={MapPin} label="Atelier">
               Silkroute Naturals Experience Center<br/>
               100 Ft Road, Indiranagar<br/>
-              Bengaluru — 560038
+              Bengaluru, 560038
             </ContactBlock>
             <ContactBlock icon={Phone} label="Telephone">+91 7406 995 999</ContactBlock>
             <ContactBlock icon={Mail} label="Email">hello@silkroutenaturals.com</ContactBlock>
             <ContactBlock icon={Clock} label="Hours">
-              Tuesday — Sunday<br/>
-              11:00 — 20:00<br/>
+              Tuesday to Sunday<br/>
+              11:00 to 20:00<br/>
               <span className="text-foreground/50">Closed Mondays</span>
             </ContactBlock>
           </div>
@@ -74,7 +74,7 @@ export default function Contact() {
         </div>
         <div className="w-full h-[60vh] grayscale-[40%]">
           <iframe
-            title="Silkroute Naturals — Indiranagar Atelier"
+            title="Silkroute Naturals, Indiranagar Atelier"
             src="https://www.google.com/maps?q=100+Feet+Road+Indiranagar+Bengaluru&output=embed"
             className="w-full h-full border-0"
             loading="lazy"

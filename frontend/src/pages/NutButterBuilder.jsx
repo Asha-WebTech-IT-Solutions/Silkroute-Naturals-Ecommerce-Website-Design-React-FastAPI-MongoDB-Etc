@@ -31,7 +31,7 @@ const FLAVORS = [
 ];
 
 export default function NutButterBuilder() {
-  useSEO({ title: "Custom Nut Butter Atelier", description: "Design your own jar — choose your nuts, roast, flavors, texture and size. Stone-ground to order." });
+  useSEO({ title: "Custom Nut Butter Atelier", description: "Design your own jar, choose your nuts, roast, flavors, texture and size. Stone-ground to order." });
   const { addItem } = useCart();
   const [step, setStep] = useState(0);
   const [config, setConfig] = useState({
@@ -71,7 +71,7 @@ export default function NutButterBuilder() {
 
   const addToCart = () => {
     if (!pricing) return;
-    const name = `Custom — ${config.nuts.map((n) => n[0].toUpperCase() + n.slice(1)).join(" + ")} (${config.size})`;
+    const name = `Custom, ${config.nuts.map((n) => n[0].toUpperCase() + n.slice(1)).join(" + ")} (${config.size})`;
     addItem({ id: `custom-${Date.now()}`, name, price: pricing.price, image: "https://images.pexels.com/photos/33657317/pexels-photo-33657317.jpeg" }, 1, config);
     toast.success("Custom jar added to cart");
   };
@@ -218,7 +218,7 @@ export default function NutButterBuilder() {
               </button>
             ) : (
               <button onClick={addToCart} disabled={!pricing} className="btn-primary disabled:opacity-30" data-testid="builder-add-to-cart">
-                Add to Cart · {pricing ? formatINR(pricing.price) : "—"}
+                Add to Cart · {pricing ? formatINR(pricing.price) : "-"}
               </button>
             )}
           </div>
@@ -258,7 +258,7 @@ function stepInstructions(step) {
     "Pick one or more origins. Mix to create a custom blend.",
     "Raw keeps the natural sweetness. Roasted develops nuttier, caramel notes.",
     "Light brings out subtle aromas. Dark goes bolder, more intense.",
-    "Optional. Pick none or up to all five — added by hand, in small amounts.",
+    "Optional. Pick none or up to all five, added by hand, in small amounts.",
     "Smooth is classic and spreadable. Crunchy keeps small nut pieces inside.",
     "Choose how much. The 1kg atelier reserve is best value.",
   ][step] || "";

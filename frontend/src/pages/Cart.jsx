@@ -14,7 +14,7 @@ export default function Cart() {
   return (
     <div className="section-pad container-luxe" data-testid="cart-page">
       <div className="overline mb-3">Your selection</div>
-      <h1 className="font-serif text-5xl md:text-6xl tracking-tighter">Cart {count > 0 && <span className="text-foreground/40">— {count}</span>}</h1>
+      <h1 className="font-serif text-5xl md:text-6xl tracking-tighter">Cart {count > 0 && <span className="text-foreground/40">- {count}</span>}</h1>
 
       {items.length === 0 ? (
         <div className="mt-16 py-24 text-center" style={{ background: "hsl(var(--background-2))" }}>

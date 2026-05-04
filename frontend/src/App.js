@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import ScrollToTop from "@/components/ScrollToTop";
 
 import PublicLayout from "@/components/PublicLayout";
@@ -45,6 +46,7 @@ function App() {
       <AuthProvider>
         <WishlistProvider>
           <CartProvider>
+            <ThemeProvider>
             <BrowserRouter>
               <ScrollToTop />
               <Routes>
@@ -92,6 +94,7 @@ function App() {
               </Routes>
               <Toaster richColors position="top-center" />
             </BrowserRouter>
+            </ThemeProvider>
           </CartProvider>
         </WishlistProvider>
       </AuthProvider>

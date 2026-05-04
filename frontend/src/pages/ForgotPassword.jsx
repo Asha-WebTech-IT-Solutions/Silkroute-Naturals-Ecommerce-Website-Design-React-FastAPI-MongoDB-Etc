@@ -17,7 +17,7 @@ export default function ForgotPassword() {
       await api.post("/auth/forgot-password", { email });
       setDone(true); toast.success("Reset link sent if email exists");
     } catch (err) {
-      // intentionally do not leak existence — show generic success
+      // intentionally do not leak existence, show generic success
       setDone(true);
     } finally { setLoading(false); }
   };

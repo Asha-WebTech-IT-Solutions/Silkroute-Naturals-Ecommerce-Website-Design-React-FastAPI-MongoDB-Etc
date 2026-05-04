@@ -37,7 +37,7 @@ export default function Checkout() {
       const { data } = await api.post("/coupons/validate", { code: coupon, subtotal });
       setAppliedCoupon(data.coupon);
       setDiscount(data.discount);
-      toast.success(`Coupon applied — ₹${data.discount} off`);
+      toast.success(`Coupon applied, ₹${data.discount} off`);
     } catch (e) {
       toast.error(e.response?.data?.detail || "Invalid coupon");
     }
@@ -53,7 +53,7 @@ export default function Checkout() {
         guest: isGuest ? guest : null,
       });
       clear();
-      toast.success(`Order placed — ${data.order_number}`);
+      toast.success(`Order placed, ${data.order_number}`);
       nav(user ? "/account" : `/order-confirmed/${data.order_number}`, { state: { order: data } });
     } catch (e) {
       toast.error(e.response?.data?.detail || "Order failed");
@@ -67,7 +67,7 @@ export default function Checkout() {
           <div>
             <div className="flex items-end justify-between mb-3">
               <div>
-                <div className="overline mb-2">Step 1 — Contact</div>
+                <div className="overline mb-2">Step 1, Contact</div>
                 <h2 className="font-serif text-3xl">Continue as guest</h2>
               </div>
               <Link to="/login" state={{ from: "/checkout" }} className="text-xs uppercase tracking-widest hover-underline" data-testid="checkout-signin-link">Sign in instead →</Link>
@@ -82,7 +82,7 @@ export default function Checkout() {
         )}
 
         <div>
-          <div className="overline mb-3">{isGuest ? "Step 2" : "Step 1"} — Shipping</div>
+          <div className="overline mb-3">{isGuest ? "Step 2" : "Step 1"}, Shipping</div>
           <h2 className="font-serif text-3xl">Shipping address</h2>
           <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-4">
             <input required className="luxe-input col-span-2" placeholder="Address Line 1" value={address.line1} onChange={(e) => setAddress({ ...address, line1: e.target.value })} data-testid="checkout-line1" />
@@ -95,10 +95,10 @@ export default function Checkout() {
         </div>
 
         <div>
-          <div className="overline mb-3">{isGuest ? "Step 3" : "Step 2"} — Payment</div>
+          <div className="overline mb-3">{isGuest ? "Step 3" : "Step 2"}, Payment</div>
           <h2 className="font-serif text-3xl">Payment</h2>
           <div className="mt-4 p-5 border flex items-center gap-3" style={{ borderColor: "hsl(var(--line))" }}>
-            <input type="radio" defaultChecked /> <span>Razorpay (test mode — payment is mocked)</span>
+            <input type="radio" defaultChecked /> <span>Razorpay (test mode, payment is mocked)</span>
           </div>
           <p className="text-xs text-foreground/60 mt-2">Live payment will be enabled once Razorpay credentials are added.</p>
         </div>

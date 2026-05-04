@@ -35,9 +35,9 @@ const setJsonLd = (id, data) => {
 
 export function useSEO({ title, description, image, type = "website", jsonLd }) {
   useEffect(() => {
-    const fullTitle = title ? `${title} — Silkroute Naturals` : "Silkroute Naturals — Treasures from the Ancient Silk Route";
+    const fullTitle = title ? `${title} | Silk Route Naturals` : "Silk Route Naturals | Treasures of the Ancient Trade";
     document.title = fullTitle;
-    setMeta("description", description || "Single-origin almonds, pistachios, hazelnuts, dates and saffron — sourced from the ancient Silk Route. Slow-cured, hand-graded, luxury heritage superfoods.");
+    setMeta("description", description || "Single-origin almonds, pistachios, hazelnuts, dates and saffron, sourced from the ancient Silk Route. Slow-cured, hand-graded, luxury heritage superfoods.");
     setMeta("og:title", fullTitle, "property");
     setMeta("og:description", description || "Treasures from the ancient Silk Route.", "property");
     setMeta("og:type", type, "property");

@@ -1,13 +1,13 @@
 import { useSEO } from "@/lib/seo";
 
 export default function OurStory() {
-  useSEO({ title: "Our Story", description: "A 2,000-year-old harvest, carried with care. The Silk Route narrative behind Silkroute Naturals — Afghanistan, Iran, Turkey, Morocco, India.", image: "https://images.pexels.com/photos/9494903/pexels-photo-9494903.jpeg" });
+  useSEO({ title: "Our Story", description: "A 2,000-year-old harvest, carried with care. The Silk Route narrative behind Silk Route Naturals.", image: "https://images.pexels.com/photos/9494903/pexels-photo-9494903.jpeg" });
   const stops = [
-    { country: "Afghanistan", img: "https://images.unsplash.com/photo-1633677491262-0a51b9851f46", text: "From the orchards of Kunduz, the Mamra almond — denser, oilier, intensely fragrant. The almond of Persian poetry." },
-    { country: "Iran", img: "https://images.pexels.com/photos/34746904/pexels-photo-34746904.jpeg", text: "Rafsanjan has grown pistachios for 1,500 years. We import only the Akbari grade — large, naturally split, emerald inside." },
-    { country: "Turkey", img: "https://images.pexels.com/photos/5425018/pexels-photo-5425018.jpeg", text: "The Black Sea coast is the world's hazelnut. Slow-roasted to amber, skinned by hand." },
-    { country: "Morocco", img: "https://images.unsplash.com/photo-1708335008926-e8b898da2ae9", text: "Tafilalet — once a caravan stop on the trans-Saharan route — still grows the world's softest Medjool dates." },
-    { country: "India", img: "https://images.pexels.com/photos/9494903/pexels-photo-9494903.jpeg", text: "Kashmiri Mongra saffron from the Pampore plateau — by weight, more valuable than gold." },
+    { country: "Afghanistan", img: "https://images.unsplash.com/photo-1633677491262-0a51b9851f46", text: "From the orchards of Kunduz, the Mamra almond. Denser, oilier, intensely fragrant. The almond of Persian poetry." },
+    { country: "Iran", img: "https://images.pexels.com/photos/34746904/pexels-photo-34746904.jpeg", text: "Rafsanjan has grown pistachios for 1,500 years. We bring in only the Akbari grade. Large, naturally split, emerald inside." },
+    { country: "Turkey", img: "https://images.pexels.com/photos/5425018/pexels-photo-5425018.jpeg", text: "The Black Sea coast grows the world's hazelnut. Slow-roasted to amber, skinned by hand." },
+    { country: "Morocco", img: "https://images.unsplash.com/photo-1708335008926-e8b898da2ae9", text: "Tafilalet, once a caravan stop on the trans-Saharan route, still grows some of the softest Medjool dates." },
+    { country: "India", img: "https://images.pexels.com/photos/9494903/pexels-photo-9494903.jpeg", text: "Kashmiri Mongra saffron from the Pampore plateau. By weight, more valuable than gold." },
   ];
 
   return (
@@ -17,20 +17,21 @@ export default function OurStory() {
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(var(--background-2)/0.5) 0%, hsl(var(--background-2)/0.95) 100%)" }} />
         <div className="container-luxe relative h-full flex flex-col justify-end pb-20">
           <div className="overline mb-4">Our story</div>
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-[96px] tracking-tighter leading-none max-w-4xl">A 2,000-year-old harvest, carried with care.</h1>
+          <h1 className="font-serif text-5xl md:text-7xl lg:text-[96px] tracking-tighter leading-none max-w-4xl">A harvest carried with care, for 2,000 years.</h1>
         </div>
       </section>
 
       <section className="section-pad">
         <div className="container-luxe max-w-3xl">
           <p className="font-serif text-2xl md:text-3xl leading-snug">
-            Silkroute Naturals began with a question: what if the dry fruit on our table could still taste of the place it came from?
+            Silk Route Naturals began with a simple question. What if the dry fruit on our table could still taste of the place it came from?
           </p>
           <div className="mt-12 space-y-8 text-foreground/80 leading-loose text-lg">
-            <p>The Silk Route was never a single road. It was a network — caravans, stone bridges, oases, mountain passes. Almonds travelled west. Saffron travelled east. Hazelnuts went to Rome, dates to Damascus, walnuts to Persepolis.</p>
+            <p>The Silk Route was never a single road. It was a network of caravans, stone bridges, oases, mountain passes. Almonds travelled west. Saffron travelled east. Hazelnuts went to Rome, dates to Damascus, walnuts to Persepolis.</p>
             <p>For centuries, what arrived on a wealthy table was a journey, not a snack. Each fruit carried the soil, the climate, the hand of its farmer.</p>
-            <p>We have spent five years walking those routes again. We work with families — not factories — in Kunduz, Rafsanjan, Erbaa, Tafilalet, Pampore. We pay above market. We import in small lots. We never bleach, never sulphur, never gloss.</p>
-            <p style={{ color: "hsl(var(--gold))" }} className="font-serif text-2xl italic">What was once paid for in silk, we now pay for in care.</p>
+            <p>We spent years walking those routes again. Listening to growers in Kunduz, Rafsanjan, Erbaa, Tafilalet, Pampore. We import in small lots. We keep things unprocessed. Nothing bleached, nothing polished, nothing rushed.</p>
+            <p>The result is a pantry that looks less like a supermarket shelf and more like a memory. Closer to how our grandmothers served these nuts, and how traders once carried them across continents.</p>
+            <p style={{ color: "hsl(var(--gold))" }} className="font-serif text-2xl italic">What was once paid for in silk, we now offer with care.</p>
           </div>
         </div>
       </section>

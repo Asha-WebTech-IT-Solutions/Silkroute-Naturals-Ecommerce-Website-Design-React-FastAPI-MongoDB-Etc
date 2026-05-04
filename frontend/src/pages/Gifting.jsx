@@ -21,7 +21,7 @@ export default function Gifting() {
   return (
     <div data-testid="gifting-page">
       <section className="relative h-[60vh] grain overflow-hidden">
-        <img src="/product-lineup.jpg" alt="Silkroute Naturals — gift box product lineup" className="absolute inset-0 w-full h-full object-cover" />
+        <img src="/product-lineup.jpg" alt="Silkroute Naturals, gift box product lineup" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(var(--background)/0.3), hsl(var(--background)/0.95))" }} />
         <div className="container-luxe relative h-full flex flex-col justify-end pb-16">
           <div className="overline mb-4">Corporate · Festive · Bespoke</div>
@@ -34,10 +34,10 @@ export default function Gifting() {
           <div className="overline mb-3">Why us</div>
           <h2 className="font-serif text-4xl">Hand-assembled. Letterpress note. White-glove delivery.</h2>
           <ul className="mt-8 space-y-4 text-foreground/80">
-            <li><span style={{ color: "hsl(var(--gold))" }} className="mr-2">—</span>Custom assortments from 10 single-origin SKUs</li>
-            <li><span style={{ color: "hsl(var(--gold))" }} className="mr-2">—</span>Branded packaging, embossed seals, ribbon</li>
-            <li><span style={{ color: "hsl(var(--gold))" }} className="mr-2">—</span>Pan-India delivery in 5 working days</li>
-            <li><span style={{ color: "hsl(var(--gold))" }} className="mr-2">—</span>Minimum 25 boxes · Volume rates</li>
+            <li><span style={{ color: "hsl(var(--gold))" }} className="mr-2">·</span>Custom assortments from 10 single-origin SKUs</li>
+            <li><span style={{ color: "hsl(var(--gold))" }} className="mr-2">·</span>Branded packaging, embossed seals, ribbon</li>
+            <li><span style={{ color: "hsl(var(--gold))" }} className="mr-2">·</span>Pan-India delivery in 5 working days</li>
+            <li><span style={{ color: "hsl(var(--gold))" }} className="mr-2">·</span>Minimum 25 boxes · Volume rates</li>
           </ul>
           <div className="mt-12 grid grid-cols-2 gap-3">
             <div className="img-zoom aspect-square"><img src="/product-detail.jpg" alt="" className="w-full h-full object-cover" /></div>

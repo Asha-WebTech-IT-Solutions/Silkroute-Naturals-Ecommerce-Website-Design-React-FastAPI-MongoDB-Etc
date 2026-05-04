@@ -94,7 +94,7 @@ export default function AdminProducts() {
       load();
     } catch (err) {
       const detail = err.response?.data?.detail;
-      toast.error(typeof detail === "string" ? detail : "Failed — check fields");
+      toast.error(typeof detail === "string" ? detail : "Failed, check fields");
     }
   };
 
@@ -132,7 +132,7 @@ export default function AdminProducts() {
                     <div className="w-10 h-12 bg-sand">{p.images?.[0] && <img src={p.images[0]} alt="" className="w-full h-full object-cover" />}</div>
                     <div>
                       <div className="font-serif text-base">{p.name}</div>
-                      <div className="text-xs text-foreground/60">{p.weight} · {p.featured ? "Featured" : "—"}</div>
+                      <div className="text-xs text-foreground/60">{p.weight} · {p.featured ? "Featured" : "-"}</div>
                     </div>
                   </div>
                 </td>
@@ -221,7 +221,7 @@ export default function AdminProducts() {
               <Field label="Description" full>
                 <textarea className="luxe-input min-h-[100px]" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
               </Field>
-              <Field label="Benefits — one per line" full>
+              <Field label="Benefits, one per line" full>
                 <textarea className="luxe-input min-h-[80px]" value={form.benefits} onChange={(e) => setForm({ ...form, benefits: e.target.value })} placeholder={"Hand-graded\nSingle-origin\nNo preservatives"} />
               </Field>
               <Field label="Origin story (one line)" full>
