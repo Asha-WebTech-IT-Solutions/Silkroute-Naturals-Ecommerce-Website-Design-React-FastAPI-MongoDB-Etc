@@ -3,9 +3,9 @@ import { useTheme } from "@/context/ThemeContext";
 
 export default function Footer() {
   const { theme } = useTheme();
-  const logoSrc = theme === "dark" ? "/logo-dark.jpg" : "/logo-light.jpg";
+  const logoSrc = theme === "dark" ? "/logo-dark.jpg" : "/logo-light.png";
   return (
-    <footer className="mt-32 border-t" style={{ borderColor: "hsl(var(--line))" }} data-testid="site-footer">
+    <footer className="border-t" style={{ borderColor: "hsl(var(--line))" }} data-testid="site-footer">
       <div className="container-luxe py-20 grid md:grid-cols-4 gap-12">
         <div>
           <img src={logoSrc} alt="Silk Route Naturals" className="h-20 w-auto" />

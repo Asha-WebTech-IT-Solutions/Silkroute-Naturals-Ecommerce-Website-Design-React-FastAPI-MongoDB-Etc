@@ -4,6 +4,7 @@ import { Leaf, Sparkles, Globe, Flower } from "lucide-react";
 import api from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
 import { useSEO } from "@/lib/seo";
+import { useTheme } from "@/context/ThemeContext";
 
 const SILK_ROUTE_STOPS = [
   { country: "Afghanistan", item: "Mamra Almonds", note: "Hindu Kush, sun-dried" },
@@ -36,9 +37,13 @@ export default function Home() {
     },
   });
   const [products, setProducts] = useState([]);
+  const { theme } = useTheme();
   const SHOW_LEGACY_HERO = false;
   const SHOW_EXPERIENCE_SECTION = false;
   const SHOW_STOREFRONT_ADDRESS_SECTION = false;
+
+  const heroDesktop = theme === "dark" ? "/banner-dark-desktop.png" : "/banner-desktop.png";
+  const heroMobile  = theme === "dark" ? "/banner-dark-mobile.jpg" : "/banner-mobile.jpg";
 
   useEffect(() => {
     api.get("/products?featured=true").then((r) => setProducts(r.data || []));
@@ -46,13 +51,13 @@ export default function Home() {
 
   return (
     <div data-testid="home-page">
-      {/* HERO (banner-driven). Desktop + mobile variants from client assets. */}
+      {/* HERO (banner-driven). Desktop + mobile variants from client assets, theme-aware. */}
       <section className="relative w-full overflow-hidden" data-testid="hero-banner-section">
         <Link to="/shop" aria-label="Shop the collection" className="block group">
-          <picture>
-            <source media="(min-width: 768px)" srcSet="/banner-desktop.png" />
+          <picture key={theme}>
+            <source media="(min-width: 768px)" srcSet={heroDesktop} />
             <img
-              src="/banner-mobile.jpg"
+              src={heroMobile}
               alt="Silk Route Naturals, Treasures of the Ancient Trade"
               className="w-full h-auto block"
               loading="eager"
@@ -152,18 +157,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ATELIER / Nut butter */}
-      <section className="section-pad" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--background))" }}>
+      {/* ATELIER / Nut butter (always-dark editorial block, theme-independent) */}
+      <section className="section-pad" style={{ background: "#1a1815", color: "#f5efe4" }}>
         <div className="container-luxe grid md:grid-cols-2 gap-16 items-center">
-          <div className="img-zoom aspect-[3/4] max-h-[560px] overflow-hidden" style={{ background: "hsl(var(--foreground))" }}>
+          <div className="img-zoom aspect-[3/4] max-h-[560px] overflow-hidden" style={{ background: "#1a1815" }}>
             <img src="/product-detail.jpg" alt="Silk Route Naturals fresh nut butter atelier" className="w-full h-full object-cover object-center" />
           </div>
           <div className="fade-up">
             <div className="overline" style={{ color: "hsl(var(--gold))" }}>The Atelier</div>
-            <h2 className="font-serif text-5xl md:text-6xl tracking-tight mt-4 leading-none">
+            <h2 className="font-serif text-5xl md:text-6xl tracking-tight mt-4 leading-none" style={{ color: "#f5efe4" }}>
               Design your<br/>own jar.
             </h2>
-            <p className="mt-8 leading-relaxed text-white/70 max-w-md">
+            <p className="mt-8 leading-relaxed max-w-md" style={{ color: "rgba(245, 239, 228, 0.75)" }}>
               Almond, cashew, pistachio, hazelnut. Raw or roasted. Honey, dates, saffron, cinnamon. Smooth or crunchy. Stone-ground to order at our atelier.
             </p>
             <Link to="/nut-butter-builder" className="inline-flex mt-10 px-8 py-4 text-[12px] tracking-[0.18em] uppercase font-medium border" style={{ borderColor: "hsl(var(--gold))", color: "hsl(var(--gold))" }} data-testid="atelier-cta">

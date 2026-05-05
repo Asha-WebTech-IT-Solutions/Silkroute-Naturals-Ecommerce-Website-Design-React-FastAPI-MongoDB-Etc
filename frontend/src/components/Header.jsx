@@ -27,7 +27,7 @@ export default function Header() {
   const [mobile, setMobile] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const logoSrc = theme === "dark" ? "/logo-dark.jpg" : "/logo-light.jpg";
+  const logoSrc = theme === "dark" ? "/logo-dark.jpg" : "/logo-light.png";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
