@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    /* Silkroute palette in HSL */
+    --background: 40 47% 96%;          /* #F9F6F0 ivory */
+    --background-2: 36 39% 91%;        /* #F1EBE1 sand */
+    --foreground: 36 8% 16%;           /* #2C2A26 charcoal */
+    --foreground-muted: 36 8% 33%;     /* #5B564E */
+    --gold: 38 36% 53%;                /* #B5955C accent */
+    --gold-deep: 31 36% 40%;           /* #8A7042 */
+    --line: 36 32% 84%;                /* #E2D9CD */
+    --line-strong: 33 23% 72%;         /* #C5BAA9 */
+    --surface: 0 0% 100%;
+    --error: 0 43% 41%;
+    --success: 120 18% 36%;
+
+    /* Shadcn mapping */
+    --card: 0 0% 100%;
+    --card-foreground: 36 8% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 36 8% 16%;
+    --primary: 36 8% 16%;
+    --primary-foreground: 40 47% 96%;
+    --secondary: 36 39% 91%;
+    --secondary-foreground: 36 8% 16%;
+    --muted: 36 39% 91%;
+    --muted-foreground: 36 8% 33%;
+    --accent: 38 36% 53%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 43% 41%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 36 32% 84%;
+    --input: 36 32% 84%;
+    --ring: 38 36% 53%;
+    --radius: 2px;
+
+    --chart-1: 38 36% 53%;
+    --chart-2: 31 36% 40%;
+    --chart-3: 36 8% 33%;
+    --chart-4: 33 23% 72%;
+    --chart-5: 120 18% 36%;
+  }
+
+  /* Dark mode: black base, warm gold accents (aligned with Dark Mode Logo) */
+  .dark {
+    --background: 30 8% 5%;            /* near-black warm */
+    --background-2: 30 10% 9%;         /* softer panel */
+    --foreground: 40 30% 92%;          /* warm cream text */
+    --foreground-muted: 40 18% 72%;
+    --gold: 42 64% 60%;                /* brighter gold on black */
+    --gold-deep: 38 45% 48%;
+    --line: 30 8% 18%;
+    --line-strong: 30 8% 28%;
+    --surface: 30 10% 12%;
+    --error: 0 58% 58%;
+    --success: 120 25% 55%;
+
+    --card: 30 10% 9%;
+    --card-foreground: 40 30% 92%;
+    --popover: 30 10% 9%;
+    --popover-foreground: 40 30% 92%;
+    --primary: 40 30% 92%;
+    --primary-foreground: 30 8% 5%;
+    --secondary: 30 10% 12%;
+    --secondary-foreground: 40 30% 92%;
+    --muted: 30 10% 12%;
+    --muted-foreground: 40 18% 72%;
+    --accent: 42 64% 60%;
+    --accent-foreground: 30 8% 5%;
+    --destructive: 0 58% 58%;
+    --destructive-foreground: 40 30% 92%;
+    --border: 30 8% 18%;
+    --input: 30 8% 18%;
+    --ring: 42 64% 60%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: 0.01em;
+  }
+  .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+  .font-sans  { font-family: 'Manrope', system-ui, sans-serif; }
+
+  ::selection { background: hsl(var(--gold) / 0.25); color: hsl(var(--foreground)); }
+}
+
+@layer components {
+  .container-luxe { @apply max-w-7xl mx-auto px-6 md:px-12; }
+  .section-pad   { @apply py-24 md:py-32; }
+  .overline      { @apply text-[11px] tracking-[0.28em] uppercase font-semibold; color: hsl(var(--gold)); }
+  .h-display     { font-family: 'Cormorant Garamond', serif; font-weight: 500; letter-spacing: -0.01em; line-height: 1; }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 text-[12px] tracking-[0.18em] uppercase font-medium rounded-none transition-colors duration-300;
+    background: hsl(var(--foreground)); color: hsl(var(--background));
+  }
+  .btn-primary:hover { background: hsl(var(--gold)); color: #fff; }
+  .dark .btn-primary { background: hsl(var(--gold)); color: hsl(var(--background)); }
+  .dark .btn-primary:hover { background: hsl(var(--foreground)); color: hsl(var(--background)); }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 text-[12px] tracking-[0.18em] uppercase font-medium rounded-none transition-colors duration-300 border;
+    border-color: hsl(var(--line-strong)); color: hsl(var(--foreground));
+  }
+  .btn-ghost:hover { background: hsl(var(--background-2)); }
+  .luxe-input {
+    @apply w-full bg-transparent border-b px-0 py-3 text-base outline-none transition-colors duration-300;
+    border-color: hsl(var(--line-strong));
+  }
+  .luxe-input:focus { border-color: hsl(var(--gold)); }
+  .gold-line { width: 48px; height: 1px; background: hsl(var(--gold)); }
+  .hover-underline {
+    position: relative;
+  }
+  .hover-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 1px;
+    background: hsl(var(--gold));
+    transition: width 0.4s ease;
+  }
+  .hover-underline:hover::after { width: 100%; }
+
+  .marquee-track {
+    display: flex;
+    gap: 4rem;
+    animation: marquee 40s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .img-zoom { overflow: hidden; }
+  .img-zoom img { transition: transform 1.2s cubic-bezier(.2,.6,.2,1); }
+  .img-zoom:hover img { transform: scale(1.06); }
+
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: "";
+    position: absolute; inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+    opacity: 0.5;
+  }
+}
+
+/* fade-up entry, pure CSS, no observer needed */
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: srnFadeUp 0.9s cubic-bezier(.2,.6,.2,1) forwards;
+  animation-delay: 0.05s;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@keyframes srnFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,47 @@
+{
+  "summary": "Iteration 2 testing of Silkroute Naturals: validated all new features (search, wishlist, forgot/reset password, ScrollToTop, SEO meta tags, mailer noop) and ran full regression. Backend: 44/44 pytest cases pass (100%) — added 9 new iter-2 tests covering product search (mamra, Iran, no-match), forgot-password (existing + unknown email + generic 200), reset-password (invalid token / valid full flow / token-reuse blocked / old-pw rejected / new-pw login), mailer noop log assertions for booking + order confirmation + order status. Frontend: search modal returns Mamra Almonds and navigates correctly, wishlist toggle + count badge + /wishlist page + add-to-cart from wishlist all work, /forgot-password submit shows success state, /reset-password renders all fields, ScrollToTop puts product page at scrollY=0 after navigation from shop, document title and meta description update correctly per page (Home / Shop / Product), 'Made with Emergent' badge not present.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/login", "issue": "Still no brute-force lockout / rate-limit (carried over from iter 1, low priority)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Shop.jsx <select><option>", "issues": ["Hydration warning persists: Emergent's static-analyzer instrumentation injects <span style='display:contents'> inside <option>, causing 'In HTML, <span> cannot be a child of <option>' console error. Cosmetic only — UI functions correctly. Carried over from iter 1; recommend changing dynamic JSX children of <option> to plain string concatenation instead of expression-wrapped variables."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "(Optional, carryover) Silence Shop.jsx hydration warning by passing literal-string children to <option> instead of {expression}.",
+    "(Optional hardening) Add login brute-force lockout per /app/auth_testing.md.",
+    "When SMTP credentials become available, set SMTP_HOST/USER/PASSWORD in /app/backend/.env — code path already in place via mailer._send."
+  ],
+  "critical_code_review_comments": [
+    "mailer.py is_configured() correctly gates real send vs noop log; '[mailer:noop] To=... Subject=... (SMTP not configured)' lines verified for password-reset, welcome, order-confirmation, order-status, and booking flows.",
+    "/api/auth/forgot-password is non-enumerating (always 200) — good security hygiene. Reset token uses secrets.token_urlsafe(32), TTL 1h, MongoDB TTL index on expires_at, single-use enforced via 'used' flag.",
+    "/api/auth/reset-password correctly handles both naive and tz-aware expires_at and rejects already-used tokens with 400.",
+    "Search query uses case-insensitive $regex over name/origin/category — works but unbounded regex could be slow at scale; consider Atlas $text index or simple lowercase-prefix index for production scale.",
+    "ScrollToTop component verified end-to-end: navigating from /shop to /product/* lands at window.scrollY === 0.",
+    "useSEO hook correctly mutates document.title and meta[name='description'] per page — verified on Home, Shop, Product pages.",
+    "WishlistContext is localStorage-backed (no backend persistence) — acceptable for this MVP; users on a different device won't see saved items.",
+    "server.py is 845 lines (up from 770). Recommend splitting into route modules (auth, products, orders, admin, content, password-reset) per the 700-line guideline.",
+    "Reset-password endpoint returns generic 400 for both invalid and expired tokens — fine for security; UX could distinguish via separate codes if desired.",
+    "FRONTEND_URL fallback in mailer.py defaults to https://silkroutenaturals.com — currently overridden by env to preview URL, good."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py — added 9 iteration-2 test cases (TestProductSearch, TestPasswordReset, TestMailerNoop)"
+  ],
+  "success_rate": {"backend": "100% (44/44)", "frontend": "100% on all iter-2 critical paths tested"},
+  "test_credentials": "admin@silkroutenaturals.com / Silkroute@2026 ; customer@example.com / Customer@2026 — both verified working",
+  "seed_data_creation": "Test artefacts: 1 reset-test user resettest_*@example.com (password rotated), 1 contact, 1 booking, 1 gifting, 1 customer order via mocked Razorpay (stock decremented), 1 review, 1 admin coupon (cleaned up), 1 admin product (created+updated+deleted).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All iteration-2 features (search, wishlist, forgot/reset password, ScrollToTop, SEO, mailer noop) verified end-to-end. Reset-password integration test reads the reset link from /var/log/supervisor/backend.err.log via [forgot-password] log line — pattern: 'reset link for <email>: <url>?token=<token>'. Mailer noop emits '[mailer:noop] To=... Subject=... (SMTP not configured)' and is asserted in TestMailerNoop. The Shop.jsx <option><span> hydration warning is the only known carryover cosmetic issue. No functional regressions detected.",
+  "rca_of_issue": "No new bugs found in iteration 2. The only persistent cosmetic issue (Shop.jsx hydration warning) originates from Emergent's webpack instrumentation injecting <span style='display:contents'> wrappers around dynamic JSX expressions inside <option> elements; harmless to users but pollutes console. Mailer SMTP intentionally not configured per problem statement — verified graceful no-op via log assertions."
+}
