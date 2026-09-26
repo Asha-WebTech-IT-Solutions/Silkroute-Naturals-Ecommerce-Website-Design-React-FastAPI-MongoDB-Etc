@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import { getList } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 
 export default function AdminGifting() {
   const [list, setList] = useState([]);
-  useEffect(() => { api.get("/gifting-inquiries").then((r) => setList(r.data || [])); }, []);
+  useEffect(() => { getList("/gifting-inquiries").then(setList); }, []);
   return (
     <div data-testid="admin-gifting">
       <div className="overline">Bulk</div>

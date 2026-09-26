@@ -936,11 +936,28 @@ async def root():
 
 app.include_router(api)
 
+# Credentialed requests (HttpOnly cookies) cannot use a wildcard origin: the
+# browser rejects "Access-Control-Allow-Origin: *" whenever withCredentials is set.
+# So the allowed origins are always an explicit list.
+DEFAULT_ALLOWED_ORIGINS = [
+    "https://silkroutenaturals.com",
+    "https://www.silkroutenaturals.com",
+    "http://localhost:3000",
+]
+
+_env_origins = [o.strip().rstrip("/") for o in (os.environ.get("CORS_ORIGINS") or "").split(",")]
+_frontend_url = (os.environ.get("FRONTEND_URL") or "").strip().rstrip("/")
+ALLOWED_ORIGINS = sorted({
+    o for o in (_env_origins + [_frontend_url] + DEFAULT_ALLOWED_ORIGINS)
+    if o and o != "*"
+})
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=["*"],
-    allow_origin_regex=".*",
+    allow_origins=ALLOWED_ORIGINS,
+    # Emergent preview/staging hosts and local dev ports.
+    allow_origin_regex=r"https://.*\.(emergentagent|preview\.emergentagent)\.com|http://localhost:\d+",
     allow_methods=["*"],
     allow_headers=["*"],
 )

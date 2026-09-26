@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import { getList } from "@/lib/api";
 
 export default function AdminCustomers() {
   const [list, setList] = useState([]);
-  useEffect(() => { api.get("/customers").then((r) => setList(r.data || [])); }, []);
+  useEffect(() => { getList("/customers").then(setList); }, []);
   return (
     <div data-testid="admin-customers">
       <div className="overline">CRM</div>

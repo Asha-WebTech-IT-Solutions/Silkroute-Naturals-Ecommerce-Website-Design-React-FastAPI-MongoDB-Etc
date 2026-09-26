@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import { getList } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 
 export default function AdminCustomOrders() {
   const [list, setList] = useState([]);
-  useEffect(() => { api.get("/custom-nut-butter").then((r) => setList(r.data || [])); }, []);
+  useEffect(() => { getList("/custom-nut-butter").then(setList); }, []);
 
   return (
     <div data-testid="admin-custom-orders">

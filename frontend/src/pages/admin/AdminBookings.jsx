@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import api, { getList } from "@/lib/api";
 import { toast } from "sonner";
 
 export default function AdminBookings() {
   const [list, setList] = useState([]);
-  const load = () => api.get("/bookings").then((r) => setList(r.data || []));
+  const load = () => getList("/bookings").then(setList);
   useEffect(() => { load(); }, []);
   const update = async (id, status) => { await api.put(`/bookings/${id}/status`, { status }); toast.success("Updated"); load(); };
 

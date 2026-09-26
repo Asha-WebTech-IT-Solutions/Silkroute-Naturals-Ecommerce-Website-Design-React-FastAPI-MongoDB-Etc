@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { X, Search } from "lucide-react";
-import api from "@/lib/api";
+import { getList } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 
 export default function SearchModal({ open, onClose }) {
@@ -12,7 +12,7 @@ export default function SearchModal({ open, onClose }) {
     if (!open) { setQ(""); setResults([]); return; }
     const t = setTimeout(() => {
       if (!q.trim()) { setResults([]); return; }
-      api.get(`/products?search=${encodeURIComponent(q)}`).then((r) => setResults((r.data || []).slice(0, 8)));
+      getList(`/products?search=${encodeURIComponent(q)}`).then((list) => setResults(list.slice(0, 8)));
     }, 200);
     return () => clearTimeout(t);
   }, [q, open]);

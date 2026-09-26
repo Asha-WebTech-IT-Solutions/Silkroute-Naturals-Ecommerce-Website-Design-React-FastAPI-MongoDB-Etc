@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import api, { getList } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 import { toast } from "sonner";
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
-  const load = () => api.get("/orders").then((r) => setOrders(r.data || []));
+  const load = () => getList("/orders").then(setOrders);
   useEffect(() => { load(); }, []);
 
   const update = async (id, status) => {

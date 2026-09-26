@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import api, { getList } from "@/lib/api";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -7,7 +7,7 @@ export default function AdminBanners() {
   const [list, setList] = useState([]);
   const [form, setForm] = useState({ title: "", subtitle: "", cta_label: "", cta_link: "", image: "", active: true });
 
-  const load = () => api.get("/banners/all").then((r) => setList(r.data || []));
+  const load = () => getList("/banners/all").then(setList);
   useEffect(() => { load(); }, []);
 
   const create = async (e) => {

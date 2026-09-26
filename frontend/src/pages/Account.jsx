@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Navigate, Link, useNavigate, NavLink, Outlet } from "react-router-dom";
-import api from "@/lib/api";
+import api, { getList } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 import { useSEO } from "@/lib/seo";
 import { toast } from "sonner";
@@ -57,7 +57,7 @@ export default function AccountLayout() {
 
 export function AccountOrders() {
   const [orders, setOrders] = useState([]);
-  useEffect(() => { api.get("/orders/mine").then((r) => setOrders(r.data || [])); }, []);
+  useEffect(() => { getList("/orders/mine").then(setOrders); }, []);
   return (
     <div data-testid="account-orders">
       <div className="overline mb-3">Order history</div>
@@ -135,7 +135,7 @@ export function AccountAddresses() {
   const [list, setList] = useState([]);
   const [form, setForm] = useState({ label: "Home", line1: "", line2: "", city: "", state: "", pincode: "", country: "India", is_default: false });
   const [showForm, setShowForm] = useState(false);
-  const load = () => api.get("/users/me/addresses").then((r) => setList(r.data || []));
+  const load = () => getList("/users/me/addresses").then(setList);
   useEffect(() => { load(); }, []);
 
   const add = async (e) => {

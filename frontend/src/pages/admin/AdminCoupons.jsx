@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import api, { getList } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
@@ -8,7 +8,7 @@ export default function AdminCoupons() {
   const [list, setList] = useState([]);
   const [form, setForm] = useState({ code: "", discount_type: "percent", discount_value: 10, min_order: 0, active: true, description: "" });
 
-  const load = () => api.get("/coupons").then((r) => setList(r.data || []));
+  const load = () => getList("/coupons").then(setList);
   useEffect(() => { load(); }, []);
 
   const create = async (e) => {

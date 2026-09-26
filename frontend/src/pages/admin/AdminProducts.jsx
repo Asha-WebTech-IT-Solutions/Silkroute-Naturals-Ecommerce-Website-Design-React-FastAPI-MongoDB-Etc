@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import api from "@/lib/api";
+import api, { getList } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, X, Upload } from "lucide-react";
@@ -18,7 +18,7 @@ export default function AdminProducts() {
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef(null);
 
-  const load = () => api.get("/products").then((r) => setProducts(r.data || []));
+  const load = () => getList("/products").then(setProducts);
   useEffect(() => { load(); }, []);
 
   const openNew = () => {

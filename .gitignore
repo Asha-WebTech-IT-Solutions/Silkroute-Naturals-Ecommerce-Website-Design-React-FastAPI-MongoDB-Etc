@@ -132,3 +132,6 @@ credentials.json
 *.pem
 *.key
 .credentials
+
+# Public build-time config for production frontend (no secrets)
+!frontend/.env.production

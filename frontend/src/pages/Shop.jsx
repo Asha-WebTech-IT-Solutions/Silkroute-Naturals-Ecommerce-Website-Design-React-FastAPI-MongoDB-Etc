@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import api from "@/lib/api";
+import { getList } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
 import { useSEO } from "@/lib/seo";
 
@@ -13,7 +13,7 @@ export default function Shop() {
   const [origin, setOrigin] = useState("all");
   const [sort, setSort] = useState("featured");
 
-  useEffect(() => { api.get("/products").then((r) => setProducts(r.data || [])); }, []);
+  useEffect(() => { getList("/products").then(setProducts); }, []);
 
   const filtered = useMemo(() => {
     let out = products.slice();

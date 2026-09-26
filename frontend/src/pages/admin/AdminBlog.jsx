@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import api, { getList } from "@/lib/api";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -7,7 +7,7 @@ export default function AdminBlog() {
   const [list, setList] = useState([]);
   const [form, setForm] = useState({ slug: "", title: "", excerpt: "", cover_image: "", content: "", author: "Silkroute Editorial" });
 
-  const load = () => api.get("/blog").then((r) => setList(r.data || []));
+  const load = () => getList("/blog").then(setList);
   useEffect(() => { load(); }, []);
 
   const create = async (e) => {

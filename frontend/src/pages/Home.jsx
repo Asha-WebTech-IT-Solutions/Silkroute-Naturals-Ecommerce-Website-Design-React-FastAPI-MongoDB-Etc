@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Leaf, Sparkles, Globe, Flower } from "lucide-react";
-import api from "@/lib/api";
+import { getList } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
 import { useSEO } from "@/lib/seo";
 import { useTheme } from "@/context/ThemeContext";
@@ -37,6 +37,7 @@ export default function Home() {
     },
   });
   const [products, setProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
   const { theme } = useTheme();
   const SHOW_LEGACY_HERO = false;
   const SHOW_EXPERIENCE_SECTION = false;
@@ -46,7 +47,20 @@ export default function Home() {
   const heroMobile  = theme === "dark" ? "/banner-dark-mobile.jpg" : "/banner-mobile.jpg";
 
   useEffect(() => {
-    api.get("/products?featured=true").then((r) => setProducts(r.data || []));
+    let cancelled = false;
+    // The API host can cold-start, so retry a couple of times before giving up.
+    const load = async (attempt = 0) => {
+      const list = await getList("/products?featured=true");
+      if (cancelled) return;
+      if (list.length === 0 && attempt < 2) {
+        setTimeout(() => load(attempt + 1), 2500);
+        return;
+      }
+      setProducts(list);
+      setLoadingProducts(false);
+    };
+    load();
+    return () => { cancelled = true; };
   }, []);
 
   return (
@@ -127,9 +141,26 @@ export default function Home() {
             </div>
             <Link to="/shop" className="hover-underline text-[12px] tracking-[0.18em] uppercase font-medium hidden md:block">View all</Link>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
-            {products.slice(0, 4).map((p) => <ProductCard key={p.id} p={p} />)}
-          </div>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12" data-testid="featured-products-grid">
+              {products.slice(0, 4).map((p) => <ProductCard key={p.id} p={p} />)}
+            </div>
+          ) : loadingProducts ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12" data-testid="featured-products-loading">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-[4/5] w-full" style={{ background: "hsl(var(--background-2))" }} />
+                  <div className="h-3 mt-5 w-2/3" style={{ background: "hsl(var(--background-2))" }} />
+                  <div className="h-3 mt-3 w-1/3" style={{ background: "hsl(var(--background-2))" }} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="py-12 text-foreground/70" data-testid="featured-products-empty">
+              <p>Our featured harvests are being restocked.</p>
+              <Link to="/shop" className="hover-underline text-[12px] tracking-[0.18em] uppercase font-medium mt-4 inline-block">Browse the full collection</Link>
+            </div>
+          )}
         </div>
       </section>
 
